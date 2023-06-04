@@ -48,7 +48,7 @@ with st.container():
 # ---- Research ----
 with st.container():
     st.write("_ _ _ _")
-    st.header("My Research")
+    st.header("Research")
     st.write("##")
     image_column, text_column = st.columns((2))
     with text_column:
