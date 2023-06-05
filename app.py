@@ -31,7 +31,7 @@ lottie_project = load_lottieurl(
 # ---- Header ----
 with st.container():
     st.subheader("Hi, I am Manoj Roy :wave:")
-    st.title("A Data Enthusiast & Researcher")
+    st.title("Data Enthusiast & Researcher")
     st.write("##")
     st.markdown(
         """
