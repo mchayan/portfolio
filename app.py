@@ -136,9 +136,7 @@ with st.container():
         st.header("Education")
         st.write("##")
 
-import streamlit as st
-import plotly.graph_objects as go
-import streamlit.components.v1 as components
+
 
 
 def create_line_graph():
