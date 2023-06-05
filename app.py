@@ -3,6 +3,10 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 import plotly.graph_objects as go
 
+import streamlit as st
+import subprocess
+
+
 
 st.set_page_config(page_title="Manoj Roy", page_icon=":running:", layout="wide")
 
@@ -36,7 +40,7 @@ with st.container():
     st.markdown(
         """
         <div class="newspaper">
-            <p class="first-letter">A</p> highly motivated and detail-oriented researcher with an M.Sc. in Applied Statistics and
+            <p class="first-letter">A</p> highly motivated and detail-oriented researcher with an Masters in Applied Statistics and
             Data Science, possessing a strong background in statistics and data analysis. Passionate about
             public health and epidemiology, with a keen interest in understanding the spread and control
             of infectious diseases, committed to improving health outcomes in communities. A natural
@@ -116,6 +120,8 @@ fig.update_layout(
     ),
 )
 
+
+
 # Layout the page with two columns
 col1, col2 = st.columns(2)
 
@@ -128,6 +134,21 @@ with col2:
     st_lottie(lottie_coding, height=200, key="coding")
 # ---- What I do ----
 
+# # ---- Expandable ----
+# # Create an expander section
+# with st.expander("My Skills"):
+#     # Add content inside the expander
+#     st.write("")
+
+#     # Add a button to open the other Streamlit Python file
+#     if st.button("Open"):
+#         # Get the path to the other Streamlit Python file
+#         file_path = "./footer.py"
+#         # Launch the other Streamlit Python file using subprocess
+#         subprocess.run(["streamlit", "run", file_path])
+        
+# # ---- Expandable ----   
+        
 # ---- Education ----
 with st.container():
     st.write("____")
@@ -135,8 +156,6 @@ with st.container():
     with left_column:
         st.header("Education")
         st.write("##")
-
-
 
 
 def create_line_graph():
@@ -307,3 +326,46 @@ st.markdown(css, unsafe_allow_html=True)
     #     st.caption('A caption with _italics_ :blue[colors] and emojis :sunglasses:')
 
 # ---- Projects ----
+
+# ---- Footer ----
+st.markdown("---")
+st.markdown(
+    """
+    <style>
+        .footer {
+            text-align: center;
+        }
+        
+        .footer .made-by {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .footer .flag {
+            width: 25px;
+            height: 25px;
+            vertical-align: middle;
+        }
+        
+        .footer .author {
+            font-weight: bold;
+            color: #0366d6;
+            text-decoration: none;
+        }
+        
+        .footer .coffee {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+    
+    <div class="footer">
+        <p class="made-by">Made in <img class="flag" src="https://avatars3.githubusercontent.com/u/45109972?s=400&v=4"> with ❤️ by
+        <a class="author" href="https://www.tumblr.com/blog/mchayan" target="_blank">@mchayan</a></p>
+        
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
