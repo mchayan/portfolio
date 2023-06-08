@@ -4,20 +4,15 @@ from streamlit_lottie import st_lottie
 from streamlit_echarts import st_echarts
 import plotly.graph_objects as go
 
-import streamlit as st
-import subprocess
-
-
-
+#Configuration
 st.set_page_config(page_title="Manoj Roy", page_icon=":running:", layout="wide")
 
-
+#Helping Function
 def load_lottieurl(url):
     r = requests.get(url)
     if r.status_code != 200:
         return None
     return r.json()
-
 
 # ---- LOAD ASSETS ----
 lottie_education = load_lottieurl(
@@ -36,7 +31,6 @@ lottie_project = load_lottieurl(
 lottie_skills = load_lottieurl(
     "https://assets9.lottiefiles.com/packages/lf20_ul35wckt.json"
 )
-
 
 # ---- Header ----
 with st.container():
@@ -135,8 +129,6 @@ left_column, right_column = st.columns([2, 1])
 with left_column:
     render_nightingale_rose_diagram()
 
-
-# Display the skills animation in the second column
 # Display the skills animation in the second column
 with right_column:
     st_lottie(lottie_skills, speed=1, width=300, height=300)
@@ -268,7 +260,7 @@ col1, col2 = st.columns([1, 2])
 with col1:
     st_lottie(lottie_education, height=200, key="education")
 
-# Column 2 - GraphLottie
+# Column 2 - Graph
 with col2:
     create_line_graph()
 # ---- Education ----
@@ -372,16 +364,56 @@ st.markdown(css, unsafe_allow_html=True)
 
 # ---- Footer ----
 st.markdown("---")
+st.header("Connect with Me")
+st.write("##")
+
+# Contact information
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.markdown(
+        """
+        <a href="mailto:manoj4292@diu.edu.bd">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            <div class="contact-icon">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>manoj4292@diu.edu.bd</span>
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+    st.markdown(
+        """
+        <a href="https://github.com/mchayan">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            <div class="contact-icon">
+                <i class="fab fa-github"></i>
+                <span>https://github.com/mchayan</span>
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Add spacing between col1 and col2
 st.markdown(
     """
     <style>
         .footer {
             text-align: center;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 25px;
+            background-image: linear-gradient(to right, #00B4DBe , #0083B0);
         }
         
         .footer .made-by {
             font-size: 16px;
-            margin-bottom: 5px;
+            margin-bottom: 0px;
+            color: #555555;
         }
         
         .footer .flag {
@@ -400,15 +432,40 @@ st.markdown(
             width: 100px;
             height: auto;
             display: block;
-            margin: 10px auto;
+            margin: 20px auto;
+        }
+        
+        /* Add center alignment and margin for col1 and col2 */
+        .contact-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Adjust font size and vertical alignment of font-awesome icons */
+        .contact-icon i {
+            font-size: 18px;
+            margin-right: 5px;
         }
     </style>
-    
+    """,
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
     <div class="footer">
-        <p class="made-by">Made in <img class="flag" src="https://avatars3.githubusercontent.com/u/45109972?s=400&v=4"> with ❤️ by
+        <p class="made-by">Made with ❤️ in <img class="flag" src="https://avatars3.githubusercontent.com/u/45109972?s=400&v=4"> by
         <a class="author" href="https://www.tumblr.com/blog/mchayan" target="_blank">@mchayan</a></p>
-        
     </div>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
+# ---- Footer ----
+
+
+
+
+
+
+
