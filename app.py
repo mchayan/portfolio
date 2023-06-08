@@ -1,6 +1,7 @@
 import requests
 import streamlit as st
 from streamlit_lottie import st_lottie
+from streamlit_echarts import st_echarts
 import plotly.graph_objects as go
 
 import streamlit as st
@@ -31,6 +32,11 @@ lottie_research = load_lottieurl(
 lottie_project = load_lottieurl(
     "https://assets4.lottiefiles.com/packages/lf20_NxzTQeH77d.json"
 )
+
+lottie_skills = load_lottieurl(
+    "https://assets9.lottiefiles.com/packages/lf20_ul35wckt.json"
+)
+
 
 # ---- Header ----
 with st.container():
@@ -80,59 +86,96 @@ st.markdown(
 )
 # ---- Header ----
 
-# ---- What I do ----
-# Data for the pie chart
-labels = ["Proactive Learner", "Problem Solver", "Explorer"]
-values = [1, 1, 1]  # You can modify these values based on your preference
+# ---- What I Do & Skills----
+with st.container():
+    # st.write("____")
+    left_column, right_column = st.columns([2, 1])
+    with left_column:
+        st.header("")
+        # st.write("##")
 
-# Creating the pie chart figure
-fig = go.Figure(
-    data=go.Pie(
-        labels=labels,
-        values=values,
-        hole=0.4,
-        textinfo="label+percent",
-        marker=dict(
-            colors=["#0080ff", "#ff0080", "#00ff80"],
-            line=dict(color="#000000", width=2),
-        ),
-        hovertemplate="<b>%{label}</b><br>%{percent}",
-        sort=False,
+def render_nightingale_rose_diagram():
+    option = {
+        "legend": {"top": "bottom"},
+        "toolbox": {
+            "show": True,
+            "feature": {
+                "mark": {"show": True},
+                "dataView": {"show": True, "readOnly": False},
+                "restore": {"show": True},
+                "saveAsImage": {"show": True},
+            },
+        },
+        "series": [
+            {
+                "name": "My Skills",
+                "type": "pie",
+                "radius": [50, 200],
+                "center": ["50%", "50%"],
+                "roseType": "area",
+                "itemStyle": {"borderRadius": 8},
+                "data": [
+                    {"value": 335, "name": "Statistical"},
+                    {"value": 310, "name": "Technical"},
+                    {"value": 274, "name": "Proactive Learning"},
+                    {"value": 235, "name": "Problem Solving"},
+                    {"value": 400, "name": "Exploring"},
+                ],
+            }
+        ],
+    }
+    st_echarts(
+        options=option, height="600px",
     )
-)
 
-# Customizing the layout
-fig.update_layout(
-    title="What I Do",
-    title_font=dict(color="white"),
-    paper_bgcolor="rgba(0, 0, 0, 0)",
-    plot_bgcolor="rgba(0, 0, 0, 0)",
-    showlegend=True,
-    legend=dict(
-        title="Activities",
-        title_font=dict(color="white"),
-        font=dict(color="white"),
-        orientation="v",
-        yanchor="middle",
-        y=0.5,
-        xanchor="right",
-        x=0.9,
-    ),
-)
+# Create two columns layout
+left_column, right_column = st.columns([2, 1])
+
+# Display the Nightingale Rose Diagram in the first column
+with left_column:
+    render_nightingale_rose_diagram()
 
 
+# Display the skills animation in the second column
+# Display the skills animation in the second column
+with right_column:
+    st_lottie(lottie_skills, speed=1, width=300, height=300)
+    st.markdown(
+        """
+        <style>
+            .newspaper {
+                font-family: 'Georgia', serif;
+                font-size: 16px;
+                line-height: 1.6;
+                margin: 0 auto;
+                max-width: 700px;
+                padding: 20px;
+                text-align: justify;
+                color: white; /* Set the text color to white */
+            }
+            
+            .first-letter {
+                font-size: 48px;
+                font-weight: bold;
+                color: #333333;
+                margin: 0;
+                padding-right: 10px;
+                float: left;
+            }
+            
+            .colored-span {
+                color: red;
+            }
+        </style>
+        <div class="newspaper">
+            "If the statistics are boring, you’ve got the <span class="colored-span">wrong numbers</span>."<br>
+            — Edward <span class="colored-span">Tufte</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-# Layout the page with two columns
-col1, col2 = st.columns(2)
-
-# Column 1 - What I do content (Pie Chart)
-with col1:
-    st.plotly_chart(fig, use_container_width=True)
-
-# Column 2 - Lottie Animation
-with col2:
-    st_lottie(lottie_coding, height=200, key="coding")
-# ---- What I do ----
+# ---- What I Do & Skills----
 
 # # ---- Expandable ----
 # # Create an expander section
