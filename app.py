@@ -3,15 +3,14 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 from streamlit_echarts import st_echarts
 import plotly.graph_objects as go
-import folium
 from folium.plugins import AntPath
-from geopy.distance import geodesic
-import datetime
-import pytz
-from timezonefinder import TimezoneFinder
+from math import radians, sin, cos, sqrt, atan2
+import folium
+from streamlit_folium import folium_static
+from math import radians, sin, cos, sqrt, atan2
+
 
 st.set_page_config(page_title="Manoj Roy", page_icon=":running:", layout="wide")
-
 
 def home_page():
     # Home page content
@@ -342,64 +341,39 @@ def home_page():
     # ---- Footer ----
 
 
-
 def contact_page():
-    def fetch_user_location():
-        try:
-            response = requests.get("https://geolocation-db.com/json/")
-            data = response.json()
-            user_lat = data["latitude"]
-            user_lon = data["longitude"]
-            return (user_lat, user_lon)
-        except:
-            return None
-
-    def calculate_distance(user_location):
-        # Coordinates of Dhaka, Bangladesh
-        dhaka_coords = (23.8790605, 90.26904660000002)
-        
-        # Calculate the distance between Dhaka and the user location
-        distance = geodesic(dhaka_coords, user_location).kilometers
-        
-        return distance
-
-    def get_weather_info(user_location):
-        api_key = "2055637430b846240fc64490fab81407"  # Replace with your OpenWeatherMap API key
-        lat, lon = user_location
-        url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
+    def get_weather(lat, lon):
+        url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=2055637430b846240fc64490fab81407&units=metric"
         response = requests.get(url)
         data = response.json()
-        
-        if "weather" in data:
-            weather_description = data["weather"][0]["description"]
-        else:
-            weather_description = "N/A"
-        
-        if "main" in data:
-            temperature = data["main"]["temp"] - 273.15  # Convert from Kelvin to Celsius
-        else:
-            temperature = None
-        
-        return weather_description, temperature
+        return data
 
-    def get_greeting(user_timezone):
-        timezone = pytz.timezone(user_timezone)
-        
-        current_time = datetime.datetime.now(timezone)
-        current_hour = current_time.hour
-        
-        if 5 <= current_hour < 12:
-            return "Good Morning"
-        elif 12 <= current_hour < 17:
-            return "Good Afternoon"
-        else:
-            return "Good Evening"
+    def get_country_name(lat, lon):
+        url = f"https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat}&lon={lon}"
+        response = requests.get(url)
+        data = response.json()
+        try:
+            country = data["address"]["country"]
+        except KeyError:
+            country = "Unknown"
+        return country
 
-    def get_user_timezone(user_location):
-        tf = TimezoneFinder()
-        timezone = tf.timezone_at(lng=user_location[1], lat=user_location[0])
-        return timezone
+    # Function to calculate the distance between two sets of coordinates using the Haversine formula
+    def calculate_distance(lat1, lon1, lat2, lon2):
+        R = 6371  # Radius of the Earth in kilometers
 
+        # Convert latitude and longitude to radians
+        lat1_rad, lon1_rad, lat2_rad, lon2_rad = map(radians, [lat1, lon1, lat2, lon2])
+
+        # Haversine formula
+        dlat = lat2_rad - lat1_rad
+        dlon = lon2_rad - lon1_rad
+        a = sin(dlat / 2) ** 2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlon / 2) ** 2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = R * c
+
+        return distance
+    
     st.markdown(
         """
         <style>
@@ -421,63 +395,81 @@ def contact_page():
         unsafe_allow_html=True
     )
 
-    # st.markdown('<div class="title">Welcome!</div>', unsafe_allow_html=True)
+    # Streamlit app code
+    st.title("Let's Get Introduced!")
+    st.markdown("## Please let me know Your Location !")
 
-    # Greetings Message
-    user_location = fetch_user_location()
-    if user_location:
-        user_timezone = get_user_timezone(user_location)
-        if user_timezone:
-            greeting = get_greeting(user_timezone)
-            st.write(f"🌞 {greeting}!")
+    # Check if geolocation is supported
+    if "geolocation" in st.session_state:
+        lat = st.session_state.geolocation["latitude"]
+        lon = st.session_state.geolocation["longitude"]
+        geolocation_supported = True
+    else:
+        # Geolocation is not supported, provide manual input
+        st.warning("Geolocation is not supported by your browser. To Continue Please provide the Latitude & Longitude manually.")
+        lat = st.number_input("Latitude:", format="%.6f")
+        lon = st.number_input("Longitude:", format="%.6f")
+        geolocation_supported = False
+
+    if st.button("Continue >"):
+        # Get weather information based on location
+        weather_data = get_weather(lat, lon)
+        weather_description = weather_data["weather"][0]["description"]
+        temperature = weather_data["main"]["temp"]
+
+        # Display location information
+        st.subheader("🌍 Location Information")
+        st.markdown('<div class="header">Your Location</div>', unsafe_allow_html=True)
+        country = get_country_name(lat, lon)
+        st.write(f"🏴 Country: {country}")
+        st.write(f"📍 Latitude: {lat}")
+        st.write(f"📍 Longitude: {lon}")
+
+        # Display weather information
+        st.subheader("🌤️ Weather Information")
+        st.markdown('<div class="header">Weather Near You!</div>', unsafe_allow_html=True)
+        st.write(f"⊸ Description: {weather_description}")
+        st.write(f"🌡️Temperature: {temperature}°C")
+
+        # Calculate distance based on location (sample calculation using coordinates)
+        if geolocation_supported:
+            distance = calculate_distance(lat, lon, 23.7276, 90.3718)
+            st.markdown("Distance")
+            st.write(f"The probable distance between You and Me is {distance} km")
         else:
-            st.warning("Timezone information not available")
-    else:
-        st.warning("📍 Your location can't be detected automatically. Please enter your location.")
+            st.warning("Distance calculation requires geolocation support.")
+            distance_manual = calculate_distance(lat, lon, 23.7276, 90.3718)
+            st.write(f"The probable distance between You and Me is is {distance_manual} km")
 
-    st.markdown('<div class="header">Your Location</div>', unsafe_allow_html=True)
-    if user_location is not None:
-        user_lat, user_lon = user_location
-        st.write(f"🌍 Probably you are Here 📍: (Lat: {user_lat:.6f}, Lon: {user_lon:.6f})")
-    else:
-        st.warning("📍 Your Location can't be detected automatically. Please enter your location.")
-        user_lat = st.number_input("Latitude:")
-        user_lon = st.number_input("Longitude:")
+        # Create map with markers
+        m = folium.Map(location=[lat, lon], zoom_start=14)
 
-    user_location = (user_lat, user_lon)
+        # Add marker for visitor's location
+        folium.Marker(
+            location=[lat, lon],
+            popup="Probably You are Here!",
+            icon=folium.Icon(color="blue", icon="cloud")
+        ).add_to(m)
 
-    st.markdown('<div class="header">And the weather near you is ..</div>', unsafe_allow_html=True)
-    weather_description, temperature = get_weather_info(user_location)
+        # Add marker for My Location with custom icon
+        folium.Marker(
+            location=[23.7276, 90.3718],
+            popup="Hey! Here I am!",
+            icon=folium.Icon(color="green", icon="university")
+        ).add_to(m)
 
-    if temperature is not None:
-        st.write(f"🌤️ Weather Update: {weather_description}")
-        st.write(f"🌡️ Temperature Update: {temperature:.2f} °C")
-    else:
-        st.warning("Weather information not available")
+        # Add ant path line between the two locations
+        locations = [[lat, lon], [23.7276, 90.3718]]
+        ant_path = AntPath(
+            locations=locations,
+            color="green",
+            weight=8,
+            delay=1000,
+            dash_array=[15, 20]
+        ).add_to(m)
 
-    st.markdown('<div class="header"></div>', unsafe_allow_html=True)
-    map = folium.Map(location=[23.8790605, 90.26904660000002], zoom_start=10)
-
-    # Marker for Dhaka, Bangladesh
-    folium.Marker(location=[23.8790605, 90.26904660000002], popup=folium.Popup("🌍 Hey! Here I am!", max_width=250), 
-                  icon=folium.Icon(icon="cloud", prefix="fa", color="red")).add_to(map)
-
-    if user_lat != 0 and user_lon != 0:
-        # Marker for user's location
-        folium.Marker(location=user_location, popup=folium.Popup("📍 Probably You are Here!", max_width=250), 
-                      icon=folium.Icon(icon="user", prefix="fa", color="green")).add_to(map)
-
-        # Create a curved line between Dhaka and user's location
-        line = [(23.8790605, 90.26904660000002), user_location]
-        ant_path = AntPath(line, delay=1000, dash_array=[10, 20], color='blue', curvature=50)
-        ant_path.add_to(map)
-
-    st.components.v1.html(map._repr_html_(), height=800)
-
-    st.markdown('<div class="header">Distance Calculation</div>', unsafe_allow_html=True)
-    distance = calculate_distance(user_location)
-    distance_text = f'<span style="font-size: 24px; color: #00FFFF;">{distance:.2f} km</span>'
-    st.write(f"🛰️ The distance between Me and You is around: {distance_text}", unsafe_allow_html=True)
+        # Display the map
+        folium_static(m)
 
     # ---- Expandable ----
     # Create an expander section
@@ -582,7 +574,6 @@ def contact_page():
         unsafe_allow_html=True
     )
     # ---- Footer ----
-
 
 
 def main():
