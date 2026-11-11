@@ -3,43 +3,58 @@ import requests
 from streamlit_lottie import st_lottie
 from streamlit_echarts import st_echarts
 
-st.set_page_config(page_title="Manoj Roy | Academic Portfolio", page_icon="📊", layout="wide")
+st.set_page_config(
+    page_title="Manoj Roy | Academic Portfolio",
+    page_icon="📊",
+    layout="wide"
+)
 
-# Custom CSS for styling and mobile responsiveness
+# Custom CSS for Academic Styling, Styled Instant Tabs, and Mobile Responsiveness
 st.markdown("""
     <style>
+    /* Main Container */
     .stApp {
         max-width: 1200px;
         margin: 0 auto;
         padding: 1rem 2rem;
     }
+
+    /* Homepage Typography (Preserved & Refined) */
     .main-title {
-        font-size: 3.2rem;
+        font-size: 3.3rem;
         font-weight: 700;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.2rem;
+        color: #1a202c;
+        letter-spacing: -0.5px;
     }
     .sub-title {
-        font-size: 1.6rem;
-        color: #555555;
-        margin-bottom: 1.8rem;
+        font-size: 1.65rem;
+        color: #4a5568;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
     }
     .intro-text {
         font-family: 'Georgia', serif;
-        font-size: 16px;
-        line-height: 1.7;
+        font-size: 16.5px;
+        line-height: 1.75;
         text-align: justify;
-        max-width: 760px;
-        margin: 0 auto 1.5rem auto;
-        padding: 20px;
+        max-width: 780px;
+        margin: 0 auto 1.8rem auto;
+        padding: 24px 28px;
+        background-color: #fcfcfd;
+        border: 1px solid #edf2f7;
+        border-left: 4px solid #008B8B;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     }
     .first-letter {
-        font-size: 48px;
+        font-size: 50px;
         font-weight: bold;
-        color: #333333;
+        color: #2d3748;
         margin: 0;
         padding-right: 12px;
         float: left;
-        line-height: 1;
+        line-height: 0.95;
     }
     .quote {
         font-family: 'Georgia', serif;
@@ -48,51 +63,97 @@ st.markdown("""
         line-height: 1.6;
         text-align: center;
         margin-top: 1rem;
+        padding: 1rem;
+        background-color: #f8fafc;
+        border-radius: 6px;
+        border: 1px dashed #cbd5e1;
     }
     .highlight {
-        color: #00CED1;
+        color: #008B8B;
         font-weight: bold;
     }
-    
-    /* Responsive Top Navigation Bar */
-    .menu {
-        list-style-type: none;
-        padding: 0;
-        margin: 0 0 2rem 0;
-        background-color: #333333;
-        border-radius: 6px;
-        display: flex;
+
+    /* Style Streamlit Native Tabs as a Top Navigation Bar (Zero Reloads) */
+    div[data-baseweb="tab-list"] {
+        background-color: #262730;
+        border-radius: 8px;
+        padding: 6px 8px;
+        gap: 6px;
+        margin-bottom: 1.8rem;
         flex-wrap: wrap;
-        overflow: hidden;
     }
-    .menu li {
+    button[data-baseweb="tab"] {
+        background-color: transparent !important;
+        color: #e2e8f0 !important;
+        border-radius: 6px !important;
+        padding: 10px 18px !important;
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        border: none !important;
+        transition: all 0.2s ease-in-out !important;
         flex: 1 1 auto;
+        justify-content: center;
     }
-    .menu li a {
-        display: block;
-        color: white !important;
+    button[data-baseweb="tab"]:hover {
+        background-color: #3b3d4a !important;
+        color: #ffffff !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        background-color: #008B8B !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    div[data-baseweb="tab-highlight"] {
+        display: none !important;
+    }
+    div[data-baseweb="tab-border"] {
+        display: none !important;
+    }
+
+    /* Academic Summary Metric Boxes */
+    .stat-ribbon {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .stat-box {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-top: 3px solid #008B8B;
+        border-radius: 6px;
+        padding: 0.9rem 1rem;
         text-align: center;
-        padding: 14px 16px;
-        text-decoration: none !important;
-        font-size: 0.95rem;
-        transition: background-color 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .menu li a:hover {
-        background-color: #111111;
+    .stat-value {
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #1a202c;
+        font-family: 'Georgia', serif;
     }
-    .menu li a.active {
-        background-color: #008B8B;
-        font-weight: 600;
+    .stat-label {
+        font-size: 0.82rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.2rem;
     }
 
     /* Clean Academic Cards */
     .cv-card {
         background-color: #ffffff;
+        border: 1px solid #e2e8f0;
         border-left: 4px solid #008B8B;
-        border-radius: 4px;
-        padding: 1.1rem 1.3rem;
+        border-radius: 6px;
+        padding: 1.15rem 1.35rem;
         margin-bottom: 1rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cv-card:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
     }
     .cv-card-header {
         display: flex;
@@ -103,44 +164,75 @@ st.markdown("""
         margin-bottom: 0.3rem;
     }
     .cv-card-title {
-        font-size: 1.1rem;
+        font-size: 1.08rem;
         font-weight: 700;
-        color: #222222;
+        color: #1e293b;
         margin: 0;
     }
     .cv-card-date {
-        font-size: 0.9rem;
-        color: #666666;
+        font-size: 0.86rem;
+        color: #475569;
+        background-color: #f1f5f9;
+        padding: 2px 8px;
+        border-radius: 4px;
         font-weight: 500;
         white-space: nowrap;
     }
     .cv-card-subtitle {
-        font-size: 0.95rem;
+        font-size: 0.94rem;
         color: #006666;
         font-style: italic;
         margin-bottom: 0.5rem;
     }
     .cv-card-body {
-        font-size: 0.95rem;
-        color: #333333;
-        line-height: 1.6;
+        font-size: 0.94rem;
+        color: #334155;
+        line-height: 1.65;
         margin: 0;
     }
+
+    /* Skill & Topic Badges */
     .skill-badge {
         display: inline-block;
         background-color: #f0f4f8;
         color: #2c3e50;
-        padding: 4px 10px;
-        margin: 3px 4px 3px 0;
+        padding: 5px 11px;
+        margin: 3px 5px 3px 0;
         border-radius: 4px;
-        font-size: 0.88rem;
+        font-size: 0.86rem;
+        font-weight: 500;
         border: 1px solid #dce4ec;
     }
 
-    /* Mobile Adjustments */
+    /* Statistical Metric Bar for Research Explorer */
+    .metric-row {
+        margin-bottom: 0.75rem;
+    }
+    .metric-label-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.25rem;
+    }
+    .metric-bar-bg {
+        width: 100%;
+        background-color: #e2e8f0;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .metric-bar-fill {
+        height: 100%;
+        background-color: #008B8B;
+        border-radius: 5px;
+    }
+
+    /* Responsive Adjustments for Mobile & Tablet */
     @media (max-width: 768px) {
         .stApp {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.8rem;
         }
         .main-title {
             font-size: 2.2rem;
@@ -149,19 +241,19 @@ st.markdown("""
             font-size: 1.25rem;
         }
         .intro-text {
-            padding: 10px 5px;
+            padding: 16px;
             font-size: 15px;
         }
-        .menu li {
-            flex: 1 1 50%;
+        .stat-ribbon {
+            grid-template-columns: repeat(2, 1fr);
         }
-        .menu li a {
-            padding: 10px 8px;
-            font-size: 0.85rem;
+        button[data-baseweb="tab"] {
+            padding: 8px 10px !important;
+            font-size: 0.82rem !important;
         }
         .cv-card-header {
             flex-direction: column;
-            gap: 0.1rem;
+            gap: 0.2rem;
         }
     }
     </style>
@@ -181,21 +273,25 @@ def load_lottieurl(url: str):
 
 def render_nightingale_rose_diagram():
     option = {
+        "tooltip": {
+            "trigger": "item",
+            "formatter": "{b}: {c} ({d}%)"
+        },
         "legend": {"top": "bottom"},
         "toolbox": {
             "show": True,
             "feature": {
                 "mark": {"show": True},
-                "dataView": {"show": True, "readOnly": False},
+                "dataView": {"show": True, "readOnly": True},
                 "restore": {"show": True},
                 "saveAsImage": {"show": True},
             },
         },
         "series": [
             {
-                "name": "My Skills",
+                "name": "Core Attributes",
                 "type": "pie",
-                "radius": ["15%", "65%"],
+                "radius": ["18%", "68%"],
                 "center": ["50%", "45%"],
                 "roseType": "area",
                 "itemStyle": {"borderRadius": 8},
@@ -213,9 +309,16 @@ def render_nightingale_rose_diagram():
 
 
 def render_card(title, subtitle, date, body, tools=None, link=None):
-    title_html = f'<a href="{link}" target="_blank" style="color: #222222; text-decoration: underline;">{title}</a>' if link else title
+    title_html = (
+        f'<a href="{link}" target="_blank" style="color: #1e293b; text-decoration: underline;">{title} 🔗</a>'
+        if link else title
+    )
     subtitle_html = f'<div class="cv-card-subtitle">{subtitle}</div>' if subtitle else ""
-    tools_html = f'<div style="margin-top: 0.4rem; font-size: 0.88rem; color: #555;"><strong>Tools:</strong> {tools}</div>' if tools else ""
+    tools_html = (
+        f'<div style="margin-top: 0.5rem; font-size: 0.86rem; color: #475569;">'
+        f'<strong>Tools:</strong> {tools}</div>'
+        if tools else ""
+    )
     body_html = f'<p class="cv-card-body">{body}</p>' if body else ""
 
     st.markdown(f"""
@@ -231,30 +334,69 @@ def render_card(title, subtitle, date, body, tools=None, link=None):
     """, unsafe_allow_html=True)
 
 
+def render_metric_bar(label, value_str, percentage, color="#008B8B"):
+    st.markdown(f"""
+        <div class="metric-row">
+            <div class="metric-label-row">
+                <span>{label}</span>
+                <span>{value_str}</span>
+            </div>
+            <div class="metric-bar-bg">
+                <div class="metric-bar-fill" style="width: {percentage}%; background-color: {color};"></div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+
 def home_page():
+    # Header Section
     st.markdown('<h1 class="main-title">Hi, I am Manoj Roy 👋</h1>', unsafe_allow_html=True)
     st.markdown('<h2 class="sub-title">Data Enthusiast & Researcher</h2>', unsafe_allow_html=True)
 
+    # Academic At-a-Glance Ribbon
+    st.markdown("""
+        <div class="stat-ribbon">
+            <div class="stat-box">
+                <div class="stat-value">M.Sc. (3.77/4)</div>
+                <div class="stat-label">Applied Statistics & Data Science</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">4 Papers</div>
+                <div class="stat-label">Accepted & Published Research</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">1st / 37 Teams</div>
+                <div class="stat-label">ISAS 2026 Challenge Champion</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">5+ Years</div>
+                <div class="stat-label">Industry & Teaching Experience</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Preserved Introduction Content
     st.markdown(
         """
         <div class="intro-text">
-        <p><span class="first-letter">A</span> dedicated data enthusiast with a Master's in Applied Statistics and Data Science, I am passionately pursuing knowledge in statistical modeling, deep learning, and quantum machine learning. My foundation in statistics and classical ML algorithms fuels my curiosity to explore how emerging methods—from evidential uncertainty quantification to quantum computing fundamentals—can improve model reliability under challenging conditions.</p>
+        <p><span class="first-letter">A</span> dedicated data enthusiast with a Master's in Applied Statistics and Data Science, I am passionately pursuing knowledge in quantum machine learning. My strong foundation in statistics and classical ML algorithms fuels my curiosity to explore how quantum computing can revolutionize model performance. I'm actively learning to develop hybrid quantum-classical algorithms and optimize quantum feature maps, aiming to contribute to breakthroughs in ML efficiency and accuracy.</p>
         
-        <p>As an eager learner and collaborator, I enjoy bridging statistical thinking with practical problem solving. Whether working on multi-resolution indoor localization, 3D computer vision, or guiding students in data analysis, I am committed to learning continuously and contributing humbly to meaningful research.</p>
+        <p>As an eager learner and collaborator, I'm excited to bridge my statistical expertise with emerging quantum technologies. I'm committed to growing in this cutting-edge field, aspiring to participate in innovative research and real-world applications that harness quantum advantages in machine learning.</p>
         </div>
         """,
         unsafe_allow_html=True
     )
 
+    # Skills Diagram & Lottie Animation Section
     left_column, right_column = st.columns([2, 1])
 
     with left_column:
-        st_echarts(options=render_nightingale_rose_diagram(), height="500px")
+        st_echarts(options=render_nightingale_rose_diagram(), height="520px")
 
     with right_column:
         lottie_skills = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_ul35wckt.json")
         if lottie_skills:
-            st_lottie(lottie_skills, speed=1, height=280)
+            st_lottie(lottie_skills, speed=1, height=280, key="home_lottie")
 
         st.markdown(
             """
@@ -268,26 +410,26 @@ def home_page():
 
 
 def education_and_skills():
-    st.header("Education & Skills")
+    st.header("Education & Technical Profile")
 
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.subheader("🎓 Education")
+        st.subheader("🎓 Academic Degrees")
         render_card(
             title="M.Sc. in Applied Statistics and Data Science",
             subtitle="Jahangirnagar University",
             date="2021 – 2022",
-            body="CGPA: 3.77 / 4.00"
+            body="CGPA: 3.77 / 4.00 | Focus: Statistical Modeling, Machine Learning & Feature Engineering."
         )
         render_card(
             title="B.Sc. in Computer Science and Engineering",
             subtitle="Daffodil International University",
             date="2014 – 2018",
-            body="CGPA: 3.58 / 4.00"
+            body="CGPA: 3.58 / 4.00 | Focus: Algorithms, Computer Vision & Software Development."
         )
 
-        st.subheader("🛠️ Technical & Research Skills")
+        st.subheader("🛠️ Core Competencies")
         skills_data = {
             "Statistical Analysis & ML": [
                 "Applied Statistics", "Deep Learning", "Computer Vision",
@@ -306,26 +448,39 @@ def education_and_skills():
 
         for category, items in skills_data.items():
             badges = "".join([f'<span class="skill-badge">{item}</span>' for item in items])
-            st.markdown(f"**{category}**<div>{badges}</div><br>", unsafe_allow_html=True)
+            st.markdown(f"**{category}**<div>{badges}</div><div style='margin-bottom:0.6rem;'></div>", unsafe_allow_html=True)
 
     with col2:
-        st.subheader("📜 Selected Certifications")
+        st.subheader("📜 Specializations & Certifications")
+        cert_filter = st.radio(
+            "Filter by Domain:",
+            ["All (9)", "Statistics & Data Science", "Machine Learning & AI", "Engineering & Management"],
+            horizontal=True
+        )
+
         certifications = [
-            ("Data Analysis and Interpretation", "Wesleyan University", "2020", "https://www.coursera.org/account/accomplishments/specialization/Z2J48LBUJU4M"),
-            ("Applied Data Science with Python", "University of Michigan", "2020", "https://www.coursera.org/account/accomplishments/specialization/WXFWX2AD54NL"),
-            ("Data Mining", "University of Illinois Urbana-Champaign", "2020", "https://www.coursera.org/account/accomplishments/specialization/RZUALYJXPFSL"),
-            ("Advanced Statistics for Data Science", "Johns Hopkins University", "2020", "https://www.coursera.org/account/accomplishments/specialization/67T7GMUPVKN2"),
-            ("Project Management & Other Tools", "University of Illinois", "2020", "https://www.coursera.org/account/accomplishments/specialization/Y62UBR8DUFQD"),
-            ("Advanced App Development in Android", "Imperial College London", "2020", "https://www.coursera.org/account/accomplishments/specialization/P44V2WAMEB89"),
-            ("Data Science", "Johns Hopkins University", "2020", "https://www.coursera.org/account/accomplishments/specialization/P6TKC6X4H6GE"),
-            ("Machine Learning", "University of Washington", "2020", "https://www.coursera.org/account/accomplishments/specialization/BV9CYHFR8APV"),
-            ("Deep Learning", "DeepLearning.AI", "2020", "https://www.coursera.org/account/accomplishments/specialization/25TEG2MDQ2ZA"),
+            ("Data Analysis and Interpretation", "Wesleyan University", "2020", "Statistics & Data Science", "https://www.coursera.org/account/accomplishments/specialization/Z2J48LBUJU4M"),
+            ("Applied Data Science with Python", "University of Michigan", "2020", "Statistics & Data Science", "https://www.coursera.org/account/accomplishments/specialization/WXFWX2AD54NL"),
+            ("Data Mining", "University of Illinois Urbana-Champaign", "2020", "Statistics & Data Science", "https://www.coursera.org/account/accomplishments/specialization/RZUALYJXPFSL"),
+            ("Advanced Statistics for Data Science", "Johns Hopkins University", "2020", "Statistics & Data Science", "https://www.coursera.org/account/accomplishments/specialization/67T7GMUPVKN2"),
+            ("Data Science", "Johns Hopkins University", "2020", "Statistics & Data Science", "https://www.coursera.org/account/accomplishments/specialization/P6TKC6X4H6GE"),
+            ("Machine Learning", "University of Washington", "2020", "Machine Learning & AI", "https://www.coursera.org/account/accomplishments/specialization/BV9CYHFR8APV"),
+            ("Deep Learning", "DeepLearning.AI", "2020", "Machine Learning & AI", "https://www.coursera.org/account/accomplishments/specialization/25TEG2MDQ2ZA"),
+            ("Project Management & Other Tools", "University of Illinois", "2020", "Engineering & Management", "https://www.coursera.org/account/accomplishments/specialization/Y62UBR8DUFQD"),
+            ("Advanced App Development in Android", "Imperial College London", "2020", "Engineering & Management", "https://www.coursera.org/account/accomplishments/specialization/P44V2WAMEB89"),
         ]
-        for title, org, year, url in certifications:
-            st.markdown(f"- **[{title}]({url})** | {org} *({year})*")
+
+        for title, org, year, domain, url in certifications:
+            if cert_filter == "All (9)" or cert_filter == domain:
+                st.markdown(
+                    f'<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9;">'
+                    f'🔹 <a href="{url}" target="_blank" style="font-weight:600; color:#1e293b;">{title}</a> '
+                    f'<span style="color:#64748b; font-size:0.9rem;">| {org} ({year})</span></div>',
+                    unsafe_allow_html=True
+                )
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.subheader("🔬 Training & Workshops")
+        st.subheader("🔬 Specialized Training & Workshops")
         render_card(
             title="QBronze Quantum Computing",
             subtitle="QWorld (Quantum Computing & Programming using Qiskit)",
@@ -347,11 +502,65 @@ def education_and_skills():
 
 
 def research():
-    st.header("Academic Research")
+    st.header("Academic Research & Empirical Methodology")
+
+    # Interactive Statistical Thinking Showcase
+    st.markdown("""
+        <div class="cv-card" style="background-color: #f8fafc; border-left-color: #2d3748;">
+            <div class="cv-card-title" style="margin-bottom: 0.4rem;">📐 Statistical Thinking Spotlight: Evaluation Protocol & Uncertainty Analysis</div>
+            <p class="cv-card-body">
+                A recurring theme in my research is questioning standard evaluation assumptions—whether exposing how naive random splitting inflates accuracy in temporally dependent sensor streams, or quantifying epistemic uncertainty when visual priors encounter out-of-distribution weather anomalies.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    study_choice = st.radio(
+        "Inspect Empirical Findings from Recent Studies:",
+        [
+            "1. BLE Indoor Localization: Protocol Sensitivity under Temporal Shift (ISAS 2026)",
+            "2. 3D Semantic Occupancy: Evidential Feature Gating under Anomalies (EAEEIE / ICML WiML 2026)"
+        ],
+        horizontal=False
+    )
+
+    if "BLE Indoor Localization" in study_choice:
+        col_a, col_b = st.columns([1.2, 1])
+        with col_a:
+            st.markdown("##### Strict Chronological Forward Protocol Comparison")
+            render_metric_bar("Proposed Multi-Resolution Framework (Accuracy)", "60.54%", 60.54, "#008B8B")
+            render_metric_bar("10s Random Forest Baseline (Accuracy)", "55.33%", 55.33, "#64748b")
+            render_metric_bar("Proposed Framework (Weighted-F1)", "0.5973", 59.73, "#008B8B")
+            render_metric_bar("10s Random Forest Baseline (Weighted-F1)", "0.5293", 52.93, "#64748b")
+            render_metric_bar("Proposed Framework (Forward Macro-F1)", "0.3159", 31.59, "#008B8B")
+            render_metric_bar("10s Random Forest Baseline (Forward Macro-F1)", "0.2561", 25.61, "#64748b")
+        with col_b:
+            st.info(
+                "**Why Protocol Choice Matters:**\n\n"
+                "In nursing-care BLE localization, a standalone 60s XGBoost model exceeds **0.91 Macro-F1** under naive row-random splitting due to temporal autocorrelation, "
+                "but drops to **~0.25 Macro-F1** under strict chronological forward evaluation.\n\n"
+                "By treating localization as a temporally dependent measurement problem and fusing 10s Random Forest and 60s XGBoost representations with fold-local augmentation, "
+                "our framework improves forward Macro-F1 to **0.3159** and won **1st place (out of 37 teams)** at the ISAS 2026 Challenge."
+            )
+    else:
+        col_a, col_b = st.columns([1.2, 1])
+        with col_a:
+            st.markdown("##### System Efficiency & Clean-Weather Baseline")
+            render_metric_bar("Clean-Weather Semantic Accuracy (mIoU)", "30.44 mIoU", 65.0, "#008B8B")
+            render_metric_bar("Real-Time Inference Speed (Single RTX A4500)", "14.2 FPS", 71.0, "#008B8B")
+            render_metric_bar("Additional Parameter Overhead", "+0.01M Params", 5.0, "#2e7d32")
+        with col_b:
+            st.info(
+                "**Addressing Temporal Poisoning via Dirichlet Logic:**\n\n"
+                "While 2D pre-trained backbones accelerate 3D convergence and handle static noise (e.g., Fog), they suffer structural collapse under motion blur and snow—overwriting downstream 3D history buffers.\n\n"
+                "Grounded in Dirichlet subjective logic, the **Evidential Feature Gate (EFG)** dynamically quantifies out-of-distribution epistemic uncertainty at the feature level and suppresses corrupted spatial inputs toward zero."
+            )
+
+    st.markdown("---")
+    st.subheader("📚 Detailed Research Timeline")
 
     render_card(
         title="Multi-Resolution BLE Indoor Localization for Nursing Care under Signal Loss, Class Imbalance, and Temporal Shift",
-        subtitle="Role: Co-Researcher | Accepted at Journal of Physics: Conference Series (ISAS 2026 Challenge — Champion, 1st of 37 Teams)",
+        subtitle="Role: Co-Researcher | Accepted at Journal of Physics: Conference Series (ISAS 2026 Challenge)",
         date="2026",
         body=(
             "Proposed a multi-resolution framework utilizing Random Forest and XGBoost to study BLE signal loss, "
@@ -360,6 +569,18 @@ def research():
             "forward-protocol accuracy."
         )
     )
+    with st.expander("📖 Read Full Abstract (BLE Indoor Localization)"):
+        st.write(
+            "Indoor localization of nursing staff can support analysis of care routines using unobtrusive radio sensing. "
+            "This paper is submitted in connection with the ISAS 2026 Challenge and addresses its BLE-based nursing-care "
+            "location-recognition task. In an operating care facility, Bluetooth Low Energy (BLE) Received Signal Strength "
+            "Indicator (RSSI) observations are intermittent and environmentally variable, while the labeled data are "
+            "additionally shaped by heterogeneous visit duration and unequal room visitation. We therefore treat semantic "
+            "room localization as a temporally dependent measurement problem rather than only an imbalanced classification "
+            "task. We propose a multi-resolution framework combining a responsive 10s Random Forest representation with two "
+            "complementary 60s XGBoost representations, fold-local signal-pattern augmentation, synthetic minority balancing, "
+            "probability normalization and fusion, and conservative minority-class recovery."
+        )
 
     render_card(
         title="Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction",
@@ -373,10 +594,22 @@ def research():
             "accuracy while offering improved robustness under severe conditions."
         )
     )
+    with st.expander("📖 Read Full Abstract (3D Semantic Occupancy Prediction)"):
+        st.write(
+            "Vision-centric 3D semantic occupancy prediction has emerged as a highly scalable alternative to LiDAR for "
+            "autonomous driving. Due to severe optimization challenges inherent in training complex 3D spatio-temporal "
+            "transformers from scratch, existing architectures typically rely on 2D convolutional backbones pre-trained on "
+            "massive image datasets. Through an empirical analysis using the NuScenes-C robustness benchmark, we evaluate "
+            "deterministic 2D spatial priors and demonstrate that while they excel at static noise penetration, they exhibit "
+            "structural collapse under anomalies such as Motion Blur and Snow, inducing 'Temporal Poisoning.' To resolve this "
+            "vulnerability without sacrificing clean-weather performance, we propose an Evidential Feature Gate (EFG) grounded "
+            "in Dirichlet subjective logic to dynamically quantify out-of-distribution epistemic uncertainty and suppress "
+            "corrupted spatial inputs."
+        )
 
     render_card(
         title="Machine Learning Based Feature Engineering for Identifying The Causes Of Divorce",
-        subtitle="Role: Graduate Researcher | M.Sc. Dissertation, Statistics & Data Science, Jahangirnagar University",
+        subtitle="Role: Graduate Researcher | M.Sc. Dissertation, Statistics & Data Science, Jahangirnagar Univ.",
         date="Jun – Dec 2022",
         body=(
             "Analyzed behavioral and communication factors related to divorce using a dataset curated by field "
@@ -389,7 +622,7 @@ def research():
 
     render_card(
         title="Computer Vision-based Street-width Measurement for Urban Aesthetics Identification",
-        subtitle="Role: Undergraduate Researcher | B.Sc. Dissertation, Dept. of CSE, Daffodil International University",
+        subtitle="Role: Undergraduate Researcher | B.Sc. Dissertation, Dept. of CSE, Daffodil Int'l Univ.",
         date="Nov 2017 – Jul 2018",
         body=(
             "Applied a computer vision methodology to estimate physical street dimensions from digital imagery "
@@ -472,7 +705,7 @@ def experience():
         )
     )
 
-    st.subheader("🤝 Leadership Experience")
+    st.subheader("🤝 Academic & Community Leadership")
     col1, col2, col3 = st.columns(3)
     with col1:
         render_card(
@@ -500,37 +733,82 @@ def experience():
 def projects_and_publications():
     st.header("Publications, Projects & Honors")
 
-    st.subheader("📄 Publications")
-    st.markdown("""
-    <div class="cv-card">
-        <p class="cv-card-body" style="margin-bottom: 0.8rem;">
-            1. Chowdhury, U. R., <strong>Roy, M.</strong>, Kamal, M. A. S., & Yamada, K. (2026). 
-            <em>Multi-Resolution BLE Indoor Localization for Nursing Care under Signal Loss, Class Imbalance, and Temporal Shift</em>. 
-            In <em>Journal of Physics: Conference Series</em> (Accepted).
-        </p>
-        <p class="cv-card-body" style="margin-bottom: 0.8rem;">
-            2. Chowdhury, U. R., <strong>Roy, M.</strong>, Bakibillah, A. S. M., Kamal, M. A. S., & Yamada, K. (2026). 
-            <em>Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction</em>. 
-            In <em>IEEE EAEEIE 2026</em> (Accepted).
-        </p>
-        <p class="cv-card-body" style="margin-bottom: 0.8rem;">
-            3. Chowdhury, U. R., <strong>Roy, M.</strong>, Bakibillah, A. S. M., Kamal, M. A. S., & Yamada, K. (2026). 
-            <em>Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction</em>. 
-            In <em>WiML Symposium @ ICML 2026</em> (Accepted).
-        </p>
-        <p class="cv-card-body">
-            4. Chowdhury, U. R., <strong>Roy, M.</strong>, Hasanuzzaman, M., Mahmud, S., & Ferdous, M. F. (2022). 
-            <a href="https://www.taylorfrancis.com/chapters/edit/10.1201/9781003156789-5/computer-vision-based-street-width-measurement-urban-aesthetics-identification-umme-rubaiyat-chowdhury-manoj-roy-md-hasanuzzaman-shakik-mahmud-mohammad-farhan-ferdous" target="_blank">
-            <em>Computer Vision-based Street-width Measurement for Urban Aesthetics Identification</em></a>. 
-            In <em>Vehicular Ad Hoc Networks</em>. Taylor & Francis.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.subheader("📄 Peer-Reviewed Publications & Proceedings")
 
+    publications = [
+        {
+            "citation": (
+                "Chowdhury, U. R., <strong>Roy, M.</strong>, Kamal, M. A. S., & Yamada, K. (2026). "
+                "<em>Multi-Resolution BLE Indoor Localization for Nursing Care under Signal Loss, Class Imbalance, and Temporal Shift</em>. "
+                "In <em>Journal of Physics: Conference Series</em> (Accepted)."
+            ),
+            "bibtex": """@inproceedings{chowdhury2026multiresolution,
+  author    = {Chowdhury, Umme Rubaiyat and Roy, Manoj and Kamal, Md Abdus Samad and Yamada, Kou},
+  title     = {Multi-Resolution BLE Indoor Localization for Nursing Care under Signal Loss, Class Imbalance, and Temporal Shift},
+  booktitle = {Journal of Physics: Conference Series},
+  year      = {2026},
+  note      = {Accepted, ISAS 2026 Challenge Winner}
+}"""
+        },
+        {
+            "citation": (
+                "Chowdhury, U. R., <strong>Roy, M.</strong>, Bakibillah, A. S. M., Kamal, M. A. S., & Yamada, K. (2026). "
+                "<em>Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction</em>. "
+                "In <em>IEEE EAEEIE 2026</em> (Accepted)."
+            ),
+            "bibtex": """@inproceedings{chowdhury2026spatiotemporal_ieee,
+  author    = {Chowdhury, Umme Rubaiyat and Roy, Manoj and Bakibillah, A. S. M. and Kamal, Md Abdus Samad and Yamada, Kou},
+  title     = {Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction},
+  booktitle = {Proceedings of the IEEE EAEEIE Annual Conference},
+  year      = {2026},
+  note      = {Accepted}
+}"""
+        },
+        {
+            "citation": (
+                "Chowdhury, U. R., <strong>Roy, M.</strong>, Bakibillah, A. S. M., Kamal, M. A. S., & Yamada, K. (2026). "
+                "<em>Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction</em>. "
+                "In <em>WiML Symposium @ ICML 2026</em> (Accepted)."
+            ),
+            "bibtex": """@inproceedings{chowdhury2026spatiotemporal_icml,
+  author    = {Chowdhury, Umme Rubaiyat and Roy, Manoj and Bakibillah, A. S. M. and Kamal, Md Abdus Samad and Yamada, Kou},
+  title     = {Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction},
+  booktitle = {Women in Machine Learning (WiML) Symposium at ICML},
+  year      = {2026},
+  note      = {Accepted}
+}"""
+        },
+        {
+            "citation": (
+                'Chowdhury, U. R., <strong>Roy, M.</strong>, Hasanuzzaman, M., Mahmud, S., & Ferdous, M. F. (2022). '
+                '<a href="https://www.taylorfrancis.com/chapters/edit/10.1201/9781003156789-5/computer-vision-based-street-width-measurement-urban-aesthetics-identification-umme-rubaiyat-chowdhury-manoj-roy-md-hasanuzzaman-shakik-mahmud-mohammad-farhan-ferdous" target="_blank">'
+                '<em>Computer Vision-based Street-width Measurement for Urban Aesthetics Identification</em></a>. '
+                'In <em>Vehicular Ad Hoc Networks</em>. Taylor & Francis.'
+            ),
+            "bibtex": """@incollection{chowdhury2022computer,
+  author    = {Chowdhury, Umme Rubaiyat and Roy, Manoj and Hasanuzzaman, Md and Mahmud, Shakik and Ferdous, Mohammad Farhan},
+  title     = {Computer Vision-based Street-width Measurement for Urban Aesthetics Identification},
+  booktitle = {Vehicular Ad Hoc Networks},
+  publisher = {Taylor \\& Francis},
+  year      = {2022}
+}"""
+        }
+    ]
+
+    for idx, pub in enumerate(publications, 1):
+        st.markdown(f"""
+            <div class="cv-card" style="margin-bottom: 0.4rem;">
+                <p class="cv-card-body"><strong>[{idx}]</strong> {pub["citation"]}</p>
+            </div>
+        """, unsafe_allow_html=True)
+        with st.expander(f"📋 Copy BibTeX Citation [{idx}]"):
+            st.code(pub["bibtex"], language="latex")
+
+    st.markdown("<br>", unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.subheader("💻 Selected Projects")
+        st.subheader("💻 Selected Technical Prototypes")
         render_card(
             title="JustTune.AI | Experimental Music Generation Pipeline",
             subtitle="",
@@ -572,32 +850,48 @@ def projects_and_publications():
 
 
 def contact():
-    st.header("Contact")
+    st.header("Contact & Academic Correspondence")
 
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns([1.2, 1])
 
     with col1:
         st.markdown("""
         <div class="cv-card">
-            <h3 style="margin-top: 0; color: #222;">Get in Touch</h3>
-            <p class="cv-card-body" style="margin-bottom: 1rem;">
-                I am always open to discussing academic research collaborations, statistical data analysis, 
-                and teaching opportunities. Feel free to reach out via email or phone.
+            <h3 style="margin-top: 0; color: #1e293b;">Get in Touch</h3>
+            <p class="cv-card-body" style="margin-bottom: 1.2rem;">
+                I welcome discussions regarding academic research collaborations, statistical modeling, 
+                graduate research opportunities, and data analysis instruction.
             </p>
-            <p class="cv-card-body"><strong>📧 Email:</strong> <a href="mailto:roy.manoj.stats@gmail.com">roy.manoj.stats@gmail.com</a></p>
-            <p class="cv-card-body"><strong>📞 Phone:</strong> +88-01617402136</p>
-            <p class="cv-card-body"><strong>🌐 Portfolio:</strong> <a href="https://manojroy.streamlit.app/" target="_blank">manojroy.streamlit.app</a></p>
+            <p class="cv-card-body" style="margin-bottom: 0.6rem;">
+                <strong>📧 Email:</strong> <a href="mailto:roy.manoj.stats@gmail.com">roy.manoj.stats@gmail.com</a>
+            </p>
+            <p class="cv-card-body" style="margin-bottom: 0.6rem;">
+                <strong>📞 Phone:</strong> +88-01617402136
+            </p>
+            <p class="cv-card-body">
+                <strong>🌐 Portfolio:</strong> <a href="https://manojroy.streamlit.app/" target="_blank">manojroy.streamlit.app</a>
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
         <div class="cv-card">
-            <h3 style="margin-top: 0; color: #222;">Interests</h3>
-            <p class="cv-card-body">
-                Outside of statistical modeling and research, I enjoy spending my time on:
+            <h3 style="margin-top: 0; color: #1e293b;">Research & Personal Interests</h3>
+            <p class="cv-card-body" style="margin-bottom: 0.6rem;">
+                <strong>Research Areas:</strong>
             </p>
-            <div style="margin-top: 0.8rem;">
+            <div style="margin-bottom: 1rem;">
+                <span class="skill-badge">Applied Statistics</span>
+                <span class="skill-badge">3D Occupancy & Vision</span>
+                <span class="skill-badge">Evidential Uncertainty</span>
+                <span class="skill-badge">Multi-Resolution Sensor ML</span>
+                <span class="skill-badge">Quantum ML Exploration</span>
+            </div>
+            <p class="cv-card-body" style="margin-bottom: 0.6rem;">
+                <strong>Personal Interests:</strong>
+            </p>
+            <div>
                 <span class="skill-badge">Public Speaking</span>
                 <span class="skill-badge">Bibliography</span>
                 <span class="skill-badge">Music</span>
@@ -606,47 +900,28 @@ def contact():
         """, unsafe_allow_html=True)
 
 
-def get_current_nav():
-    # Compatible with both modern Streamlit (st.query_params) and older versions
-    if hasattr(st, "query_params"):
-        return st.query_params.get("nav", "Home")
-    else:
-        return st.experimental_get_query_params().get("nav", ["Home"])[0]
-
-
 def main():
-    pages = [
-        "Home",
-        "Education and Skills",
-        "Research",
-        "Experience",
-        "Projects and Publications",
-        "Contact"
-    ]
+    # Client-side instant tabs (No browser page reload on click)
+    tabs = st.tabs([
+        "🏠 Home",
+        "🎓 Education & Skills",
+        "🔬 Research",
+        "💼 Experience",
+        "📄 Publications & Honors",
+        "✉️ Contact"
+    ])
 
-    current_nav = get_current_nav()
-    if current_nav not in pages:
-        current_nav = "Home"
-
-    # Render responsive top navigation bar with active state
-    menu_items_html = ""
-    for page in pages:
-        active_class = "active" if page == current_nav else ""
-        menu_items_html += f'<li><a href="?nav={page}" target="_self" class="{active_class}">{page}</a></li>'
-
-    st.markdown(f'<ul class="menu">{menu_items_html}</ul>', unsafe_allow_html=True)
-
-    if current_nav == "Home":
+    with tabs[0]:
         home_page()
-    elif current_nav == "Education and Skills":
+    with tabs[1]:
         education_and_skills()
-    elif current_nav == "Research":
+    with tabs[2]:
         research()
-    elif current_nav == "Experience":
+    with tabs[3]:
         experience()
-    elif current_nav == "Projects and Publications":
+    with tabs[4]:
         projects_and_publications()
-    elif current_nav == "Contact":
+    with tabs[5]:
         contact()
 
 
