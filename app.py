@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for Academic Styling, Instant Client-Side Tabs, and Responsive Layout
+# Custom CSS for Academic Styling, Top Radio Navbar, and Responsive Layout
 st.markdown("""
     <style>
     /* Main Container */
@@ -17,6 +17,54 @@ st.markdown("""
         max-width: 1200px;
         margin: 0 auto;
         padding: 1rem 2rem;
+    }
+
+    /* Style the Top Navigation Radio Group as a Sleek Academic Navbar */
+    div.row-widget.stRadio > div[role="radiogroup"] {
+        background-color: #262730;
+        border-radius: 8px;
+        padding: 6px 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 1.5rem;
+        justify-content: space-between;
+    }
+    div.row-widget.stRadio > div[role="radiogroup"] > label {
+        background-color: transparent !important;
+        border-radius: 6px !important;
+        padding: 10px 16px !important;
+        margin: 0 !important;
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+    div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
+        background-color: #3b3d4a !important;
+    }
+    /* Hide the default radio circle */
+    div.row-widget.stRadio > div[role="radiogroup"] > label > div:first-child {
+        display: none !important;
+    }
+    /* Text inside the navbar */
+    div.row-widget.stRadio > div[role="radiogroup"] > label > div[data-testid="stMarkdownContainer"] p {
+        color: #e2e8f0 !important;
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+        text-align: center;
+    }
+    /* Highlight the active radio tab (Modern browsers supporting :has) */
+    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) {
+        background-color: #008B8B !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) p {
+        color: #ffffff !important;
+        font-weight: 600 !important;
     }
 
     /* Homepage Typography */
@@ -71,41 +119,6 @@ st.markdown("""
     .highlight {
         color: #008B8B;
         font-weight: bold;
-    }
-
-    /* Style Streamlit Native Tabs as a Top Navigation Bar (Zero Reloads) */
-    div[data-baseweb="tab-list"] {
-        background-color: #262730;
-        border-radius: 8px;
-        padding: 6px 8px;
-        gap: 6px;
-        margin-bottom: 1.8rem;
-        flex-wrap: wrap;
-    }
-    button[data-baseweb="tab"] {
-        background-color: transparent !important;
-        color: #e2e8f0 !important;
-        border-radius: 6px !important;
-        padding: 10px 18px !important;
-        font-size: 0.95rem !important;
-        font-weight: 500 !important;
-        border: none !important;
-        transition: all 0.2s ease-in-out !important;
-        flex: 1 1 auto;
-        justify-content: center;
-    }
-    button[data-baseweb="tab"]:hover {
-        background-color: #3b3d4a !important;
-        color: #ffffff !important;
-    }
-    button[data-baseweb="tab"][aria-selected="true"] {
-        background-color: #008B8B !important;
-        color: #ffffff !important;
-        font-weight: 600 !important;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-    div[data-baseweb="tab-highlight"], div[data-baseweb="tab-border"] {
-        display: none !important;
     }
 
     /* Academic Summary Metric Boxes */
@@ -188,15 +201,15 @@ st.markdown("""
         margin: 0;
     }
 
-    /* Methodological Note Box */
+    /* Easy-to-Read Note Box */
     .method-box {
         background-color: #f8fafc;
         border: 1px solid #e2e8f0;
         border-radius: 6px;
-        padding: 1rem 1.2rem;
-        font-size: 0.9rem;
+        padding: 1.1rem 1.25rem;
+        font-size: 0.92rem;
         color: #334155;
-        line-height: 1.6;
+        line-height: 1.65;
         margin-bottom: 1rem;
     }
 
@@ -231,9 +244,9 @@ st.markdown("""
         .stat-ribbon {
             grid-template-columns: repeat(2, 1fr);
         }
-        button[data-baseweb="tab"] {
+        div.row-widget.stRadio > div[role="radiogroup"] > label {
+            flex: 1 1 45%;
             padding: 8px 10px !important;
-            font-size: 0.82rem !important;
         }
         .cv-card-header {
             flex-direction: column;
@@ -256,11 +269,8 @@ def load_lottieurl(url: str):
 
 
 def render_nightingale_rose_diagram():
-    option = {
-        "tooltip": {
-            "trigger": "item",
-            "formatter": "{b}: {c} ({d}%)"
-        },
+    return {
+        "tooltip": {"trigger": "item", "formatter": "{b}: {c} ({d}%)"},
         "legend": {"top": "bottom"},
         "toolbox": {
             "show": True,
@@ -289,177 +299,215 @@ def render_nightingale_rose_diagram():
             }
         ],
     }
-    return option
 
 
-def render_ble_protocol_chart():
-    option = {
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+def render_ble_protocol_line_chart():
+    # Line trajectory chart showing how scores change as temporal separation increases
+    return {
+        "tooltip": {"trigger": "axis"},
         "legend": {"top": "bottom"},
-        "grid": {"left": "3%", "right": "4%", "bottom": "15%", "top": "8%", "containLabel": True},
+        "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
+            "boundaryGap": False,
             "data": [
-                "Row-Random\n(Diagnostic)",
-                "45s Block\n(±59s Purge)",
-                "Event-Group\n(±59s Purge)",
+                "Row-Random\n(Overlapping)",
+                "45s Block\n(Purged)",
+                "Event-Group\n(Unseen Visits)",
                 "LODO\n(Cross-Day)",
-                "Strict-Forward\n(Chronological)"
+                "Strict-Forward\n(Future Day)"
             ],
         },
         "yAxis": {
             "type": "value",
-            "name": "Fixed-23 Macro-F1",
-            "max": 1.0
+            "name": "Macro-F1 Score",
+            "min": 0.15,
+            "max": 0.95
         },
         "series": [
             {
                 "name": "Proposed Multi-Resolution System",
-                "type": "bar",
+                "type": "line",
+                "smooth": True,
+                "symbolSize": 9,
                 "data": [0.901, 0.348, 0.280, 0.322, 0.316],
-                "itemStyle": {"color": "#008B8B", "borderRadius": [4, 4, 0, 0]}
+                "itemStyle": {"color": "#008B8B"},
+                "lineStyle": {"width": 3.5},
+                "areaStyle": {"opacity": 0.12, "color": "#008B8B"}
             },
             {
-                "name": "60s Rich XGBoost (KL-Full + SMOTE)",
-                "type": "bar",
+                "name": "60s Rich XGBoost (Standalone)",
+                "type": "line",
+                "smooth": True,
+                "symbolSize": 8,
                 "data": [0.910, 0.303, 0.199, 0.254, 0.255],
-                "itemStyle": {"color": "#e07a5f", "borderRadius": [4, 4, 0, 0]}
+                "itemStyle": {"color": "#e07a5f"},
+                "lineStyle": {"width": 2.5, "type": "dashed"}
             },
             {
-                "name": "10s RF Summary Baseline",
-                "type": "bar",
+                "name": "10s Random Forest Baseline",
+                "type": "line",
+                "smooth": True,
+                "symbolSize": 8,
                 "data": [0.628, 0.302, 0.237, 0.287, 0.256],
-                "itemStyle": {"color": "#64748b", "borderRadius": [4, 4, 0, 0]}
+                "itemStyle": {"color": "#64748b"},
+                "lineStyle": {"width": 2.5}
             },
             {
                 "name": "10s Causal TCN",
-                "type": "bar",
+                "type": "line",
+                "smooth": True,
+                "symbolSize": 7,
                 "data": [0.542, 0.270, 0.235, 0.265, 0.211],
-                "itemStyle": {"color": "#94a3b8", "borderRadius": [4, 4, 0, 0]}
+                "itemStyle": {"color": "#94a3b8"},
+                "lineStyle": {"width": 2, "type": "dotted"}
             }
         ]
     }
-    return option
 
 
-def render_ble_ablation_chart():
-    option = {
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+def render_ble_ablation_combo_chart():
+    # Combination bar & line chart showing step-by-step ensemble progression
+    return {
+        "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
         "legend": {"top": "bottom"},
-        "grid": {"left": "3%", "right": "4%", "bottom": "15%", "top": "8%", "containLabel": True},
+        "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
             "data": [
                 "10s RF\nBaseline",
-                "Untargeted Multi-Res\nFusion (T=1.25)",
-                "+ Class-510\nScore Gate",
-                "+ Class-518\nTemporal Vote"
+                "Multi-Resolution\nFusion (Untargeted)",
+                "+ Room 510\nScore Gate",
+                "+ Room 518\nVote Weight"
             ]
         },
-        "yAxis": {"type": "value", "name": "Score", "max": 0.70},
+        "yAxis": [
+            {"type": "value", "name": "Macro-F1", "min": 0.20, "max": 0.35},
+            {"type": "value", "name": "Accuracy / Weighted-F1", "min": 0.50, "max": 0.65}
+        ],
         "series": [
             {
-                "name": "Fixed-23 Macro-F1",
+                "name": "Macro-F1 (Equal weight across 23 rooms)",
                 "type": "bar",
+                "barWidth": "38%",
+                "yAxisIndex": 0,
                 "data": [0.2561, 0.3051, 0.3077, 0.3159],
                 "itemStyle": {"color": "#008B8B", "borderRadius": [4, 4, 0, 0]}
             },
             {
-                "name": "Weighted-F1",
-                "type": "bar",
-                "data": [0.5293, 0.5962, 0.5966, 0.5973],
-                "itemStyle": {"color": "#3b82f6", "borderRadius": [4, 4, 0, 0]}
-            },
-            {
-                "name": "Accuracy",
+                "name": "Overall Accuracy",
                 "type": "line",
+                "yAxisIndex": 1,
+                "symbolSize": 9,
                 "data": [0.5533, 0.6048, 0.6051, 0.6054],
                 "itemStyle": {"color": "#0f172a"},
                 "lineStyle": {"width": 3}
+            },
+            {
+                "name": "Weighted-F1",
+                "type": "line",
+                "yAxisIndex": 1,
+                "symbolSize": 8,
+                "data": [0.5293, 0.5962, 0.5966, 0.5973],
+                "itemStyle": {"color": "#e07a5f"},
+                "lineStyle": {"width": 2.5, "type": "dashed"}
             }
         ]
     }
-    return option
 
 
-def render_efg_distance_chart():
-    option = {
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+def render_efg_clean_radar_chart():
+    # Radar chart comparing clean-weather accuracy across distances
+    return {
+        "tooltip": {"trigger": "item"},
         "legend": {"top": "bottom"},
-        "grid": {"left": "3%", "right": "4%", "bottom": "15%", "top": "8%", "containLabel": True},
-        "xAxis": {
-            "type": "category",
-            "data": [
-                "Overall\nmIoU",
-                "Overall\nRayIoU",
-                "Near Ring\n(0–15m mIoU)",
-                "Mid Ring\n(15–30m mIoU)",
-                "Far Ring\n(>30m mIoU)"
-            ]
+        "radar": {
+            "indicator": [
+                {"name": "Overall mIoU\n(Max 35)", "max": 35},
+                {"name": "Overall RayIoU\n(Max 40)", "max": 40},
+                {"name": "Near Ring 0–15m\n(Max 45)", "max": 45},
+                {"name": "Mid Ring 15–30m\n(Max 35)", "max": 35},
+                {"name": "Far Ring >30m\n(Max 20)", "max": 20}
+            ],
+            "radius": "62%",
+            "center": ["50%", "45%"]
         },
-        "yAxis": {"type": "value", "name": "Metric (%)", "max": 45},
         "series": [
             {
-                "name": "Baseline (SparseOcc v1.1)",
-                "type": "bar",
-                "data": [31.10, 36.75, 41.73, 31.33, 17.93],
-                "itemStyle": {"color": "#64748b", "borderRadius": [4, 4, 0, 0]}
-            },
-            {
-                "name": "Phase 1 EFG (No Pretrain)",
-                "type": "bar",
-                "data": [25.11, 30.63, 35.49, 24.64, 12.69],
-                "itemStyle": {"color": "#e07a5f", "borderRadius": [4, 4, 0, 0]}
-            },
-            {
-                "name": "Phase 1 EFG (With Pretrain - Proposed)",
-                "type": "bar",
-                "data": [30.44, 36.10, 41.07, 30.60, 17.02],
-                "itemStyle": {"color": "#008B8B", "borderRadius": [4, 4, 0, 0]}
+                "name": "Clean-Weather Profile",
+                "type": "radar",
+                "data": [
+                    {
+                        "value": [31.10, 36.75, 41.73, 31.33, 17.93],
+                        "name": "Baseline (SparseOcc v1.1)",
+                        "itemStyle": {"color": "#64748b"},
+                        "lineStyle": {"width": 2, "type": "dashed"}
+                    },
+                    {
+                        "value": [30.44, 36.10, 41.07, 30.60, 17.02],
+                        "name": "EFG + 2D Pretraining (Proposed)",
+                        "itemStyle": {"color": "#008B8B"},
+                        "areaStyle": {"opacity": 0.2, "color": "#008B8B"},
+                        "lineStyle": {"width": 3}
+                    },
+                    {
+                        "value": [25.11, 30.63, 35.49, 24.64, 12.69],
+                        "name": "EFG without 2D Pretraining",
+                        "itemStyle": {"color": "#e07a5f"},
+                        "lineStyle": {"width": 2}
+                    }
+                ]
             }
         ]
     }
-    return option
 
 
-def render_efg_corruption_chart():
-    option = {
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+def render_efg_degradation_line_chart():
+    # Line chart showing Relative Robustness (RR%) across corruption severities
+    return {
+        "tooltip": {"trigger": "axis"},
         "legend": {"top": "bottom"},
-        "grid": {"left": "3%", "right": "4%", "bottom": "15%", "top": "8%", "containLabel": True},
+        "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
+            "boundaryGap": False,
             "data": [
-                "Motion Blur\n(Easy RR%)",
-                "Motion Blur\n(Mid RR%)",
-                "Motion Blur\n(Hard RR%)",
-                "Snow\n(Easy RR%)",
-                "Fog Hard\n(Driveable RayIoU%)"
+                "Motion Blur\n(Easy)",
+                "Motion Blur\n(Mid)",
+                "Motion Blur\n(Hard)",
+                "Snow\n(Easy)",
+                "Snow\n(Mid)",
+                "Snow\n(Hard)"
             ]
         },
-        "yAxis": {"type": "value", "name": "Retention / Score (%)", "max": 100},
+        "yAxis": {
+            "type": "value",
+            "name": "Relative Robustness Retained (%)",
+            "min": 0,
+            "max": 100
+        },
         "series": [
             {
-                "name": "Deterministic Baseline (Pretrained)",
-                "type": "bar",
-                "data": [85.9, 28.6, 14.9, 16.2, 51.9],
-                "itemStyle": {"color": "#64748b", "borderRadius": [4, 4, 0, 0]}
+                "name": "EFG (3D Volumetric Priors / No 2D Pretrain)",
+                "type": "line",
+                "smooth": True,
+                "symbolSize": 9,
+                "data": [93.0, 71.0, 61.2, 34.8, 16.1, 10.4],
+                "itemStyle": {"color": "#008B8B"},
+                "lineStyle": {"width": 3.5},
+                "areaStyle": {"opacity": 0.12, "color": "#008B8B"}
             },
             {
-                "name": "EFG (Un-Pretrained 3D Priors)",
-                "type": "bar",
-                "data": [93.0, 71.0, 61.2, 34.8, 37.9],
-                "itemStyle": {"color": "#008B8B", "borderRadius": [4, 4, 0, 0]}
-            },
-            {
-                "name": "EFG (With 2D Pretrain)",
-                "type": "bar",
-                "data": [82.0, 26.0, 14.2, 8.9, 49.4],
-                "itemStyle": {"color": "#3b82f6", "borderRadius": [4, 4, 0, 0]}
+                "name": "Standard Pre-Trained Baseline (SparseOcc)",
+                "type": "line",
+                "smooth": True,
+                "symbolSize": 8,
+                "data": [85.9, 28.6, 14.9, 16.2, 10.1, 9.7],
+                "itemStyle": {"color": "#e07a5f"},
+                "lineStyle": {"width": 2.5, "type": "dashed"}
             }
         ]
     }
-    return option
 
 
 def render_card(title, subtitle, date, body, tools=None, link=None):
@@ -515,7 +563,7 @@ def home_page():
         </div>
     """, unsafe_allow_html=True)
 
-    # General, Humble Academic Introduction (No narrow topic lock-in)
+    # General, Humble Academic Introduction
     st.markdown(
         """
         <div class="intro-text">
@@ -531,12 +579,12 @@ def home_page():
     left_column, right_column = st.columns([2, 1])
 
     with left_column:
-        st_echarts(options=render_nightingale_rose_diagram(), height="520px", key="home_rose_chart")
+        st_echarts(options=render_nightingale_rose_diagram(), height="500px", key="home_rose_chart")
 
     with right_column:
         lottie_skills = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_ul35wckt.json")
         if lottie_skills:
-            st_lottie(lottie_skills, speed=1, height=280, key="home_lottie")
+            st_lottie(lottie_skills, speed=1, height=280, key="home_lottie_anim")
 
         st.markdown(
             """
@@ -592,10 +640,9 @@ def education_and_skills():
 
     with col2:
         st.subheader("📜 Specializations & Certifications")
-        cert_filter = st.radio(
-            "Filter by Domain:",
-            ["All (9)", "Statistics & Data Science", "Machine Learning & AI", "Engineering & Management"],
-            horizontal=True
+        cert_filter = st.selectbox(
+            "Filter Certifications by Domain:",
+            ["All (9)", "Statistics & Data Science", "Machine Learning & AI", "Engineering & Management"]
         )
 
         certifications = [
@@ -642,121 +689,122 @@ def education_and_skills():
 
 
 def research():
-    st.header("Academic Research & Empirical Methodology")
+    st.header("Academic Research")
 
     st.markdown("""
         <div class="cv-card" style="background-color: #f8fafc; border-left-color: #2d3748;">
-            <div class="cv-card-title" style="margin-bottom: 0.4rem;">📐 Interactive Empirical Explorer: Protocol Design & Structural Robustness</div>
+            <div class="cv-card-title" style="margin-bottom: 0.3rem;">🔎 Interactive Research Explorer</div>
             <p class="cv-card-body">
-                Select a study below to explore the experimental design, validation protocols, and ablation outcomes from our recent manuscripts. Both studies emphasize careful control of information boundaries, transparent reporting of trade-offs, and resistance to distributional shifts.
+                Below is a simple, visual overview of our two recent studies. Use the dropdown menus to inspect how the models behave under different evaluation setups and real-world conditions.
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    study_choice = st.radio(
-        "Select Research Study to Inspect:",
-        [
-            "Study 1: Multi-Resolution BLE Indoor Localization under Signal Loss, Class Imbalance & Temporal Shift (ISAS 2026)",
-            "Study 2: Spatio-Temporal Paradox of 2D Priors & Evidential Feature Gating in 3D Occupancy (EAEEIE / ICML WiML 2026)"
-        ]
-    )
-
-    if "Study 1" in study_choice:
-        view_mode = st.radio(
-            "Select Empirical View:",
+    col_sel1, col_sel2 = st.columns([1.2, 1])
+    with col_sel1:
+        study_choice = st.selectbox(
+            "1. Choose a Study:",
             [
-                "Cross-Protocol Sensitivity (5 Validation Regimes)",
-                "Strict-Forward Ablation & Multi-Resolution Ensemble Design"
-            ],
-            horizontal=True
+                "BLE Indoor Localization in Nursing Care (ISAS 2026)",
+                "3D Occupancy Prediction under Bad Weather (EAEEIE / ICML WiML 2026)"
+            ]
         )
 
-        if "Cross-Protocol" in view_mode:
-            col_chart, col_notes = st.columns([1.45, 1])
+    if "BLE Indoor Localization" in study_choice:
+        with col_sel2:
+            view_mode = st.selectbox(
+                "2. Choose What to View:",
+                [
+                    "How Validation Splits Change Model Scores (Line Chart)",
+                    "Step-by-Step Ensemble Improvement (Combo Chart)"
+                ]
+            )
+
+        if "Validation Splits" in view_mode:
+            col_chart, col_notes = st.columns([1.35, 1])
             with col_chart:
-                st.markdown("##### Fixed-23 Macro-F1 Across Validation Protocols")
-                st_echarts(options=render_ble_protocol_chart(), height="380px", key="ble_protocol_echarts")
+                st.markdown("##### Model Performance Across 5 Validation Methods")
+                st_echarts(options=render_ble_protocol_line_chart(), height="380px", key="ble_line_chart")
             with col_notes:
                 st.markdown("""
                 <div class="method-box">
-                    <strong>Why Validation Protocol Changes Apparent Difficulty:</strong><br><br>
-                    • <strong>Dataset Scope:</strong> 47,121 labeled seconds across Apr 10–13 (25 BLE beacons, 23 official semantic locations: 18 patient rooms and 5 common areas).<br>
-                    • <strong>Window Overlap & Leakage Control:</strong> Adjacent 10s and 60s windows share most underlying seconds. Under naive 70/30 row-random splitting, a 60s rich XGBoost reaches <strong>0.910 Macro-F1</strong> (0.9102 unrounded) due to overlapping temporal neighbors, but drops to <strong>0.255</strong> under strict-forward chronological evaluation.<br>
-                    • <strong>Known-Label Emergence:</strong> 11 of the 18 official patient rooms have zero real labeled observations on Apr 10 and emerge only on later days. Using fold-local topology-constrained KL/symmetric donor transfer and SMOTE, the proposed ensemble maintains <strong>0.316 Macro-F1</strong> (0.3159) under strict-forward evaluation and <strong>0.322</strong> under LODO.
+                    <strong>What This Chart Shows Simply:</strong><br><br>
+                    • <strong>The Practical Problem:</strong> In a care facility, we want to recognize which of the 23 rooms a nurse is in using Bluetooth (BLE) signals from 25 beacons (47,121 labeled seconds across 4 days).<br><br>
+                    • <strong>Why Random Splitting Can Be Misleading:</strong> Adjacent time windows share almost the same signal history. If we split rows randomly, a 60-second XGBoost model scores <strong>0.910 Macro-F1</strong> because similar neighboring seconds appear in both training and test sets. However, when tested on a <em>future unseen day</em> (Strict-Forward), that same model drops to <strong>0.255</strong>.<br><br>
+                    • <strong>Our Approach:</strong> By combining a short 10-second Random Forest with two 60-second XGBoost models and borrowing signal patterns from geometrically similar rooms, the combined system achieves <strong>0.316 Macro-F1</strong> on future-day evaluation.
                 </div>
                 """, unsafe_allow_html=True)
         else:
-            col_chart, col_notes = st.columns([1.45, 1])
+            col_chart, col_notes = st.columns([1.35, 1])
             with col_chart:
-                st.markdown("##### Strict-Forward Ablation (Pooled Apr 11–13, N = 36,265s)")
-                st_echarts(options=render_ble_ablation_chart(), height="380px", key="ble_ablation_echarts")
+                st.markdown("##### How Each Step Contributes (Strict-Forward Evaluation)")
+                st_echarts(options=render_ble_ablation_combo_chart(), height="380px", key="ble_combo_chart")
             with col_notes:
                 st.markdown("""
                 <div class="method-box">
-                    <strong>Ensemble Constituents & Honest Methodological Disclosure:</strong><br><br>
-                    • <strong>Three Parallel Branches:</strong> Combines a 10s Random Forest summary view (100-dim, weight 0.70), a 60s rich XGBoost view (153-dim, weight 0.15, temperature <em>T = 1.25</em>), and a 60s full-statistics XGBoost view (253-dim, weight 0.15, KL-partial transfer, <em>T = 1.0</em>).<br>
-                    • <strong>Where the Gain Comes From:</strong> <strong>81.9%</strong> of the total Macro-F1 improvement (+0.0490 of +0.0598, reaching 0.3051) and ~99% of the accuracy gain (0.5533 → 0.6048) occur at the untargeted multi-resolution fusion stage prior to class-specific rules (class-510 score gate ×1.5 and class-518 vote weight ×3.5).<br>
-                    • <strong>Scope & Limitations:</strong> Because the Apr 11–13 chronological folds informed hyperparameter screening, these figures are reported transparently as internal development estimates rather than untouched external validation. In addition, the 11s centered majority vote ([t−5s, t+5s]) is an offline batch operation requiring 5s look-ahead.
+                    <strong>What We Learned from the Step-by-Step Test:</strong><br><br>
+                    • <strong>Combining Short & Long Windows Helps Most:</strong> Over <strong>81%</strong> of our overall Macro-F1 improvement (rising from 0.2561 to 0.3051) and nearly <strong>99%</strong> of the accuracy gain (55.33% → 60.48%) came simply from blending the 10-second and 60-second models together.<br><br>
+                    • <strong>Targeted Adjustments for Rare Rooms:</strong> Adding specific rules for two hard-to-detect rooms (Room 510 and Room 518) nudged the final Macro-F1 to <strong>0.3159</strong> (with 60.54% accuracy).<br><br>
+                    • <strong>Honest Limitations:</strong> Because we used the April 11–13 chronological folds to choose our model settings, we report these numbers modestly as internal development estimates rather than untouched external test scores.
                 </div>
                 """, unsafe_allow_html=True)
 
     else:
-        view_mode = st.radio(
-            "Select Empirical View:",
-            [
-                "Clean-Weather Semantics & Radial Depth Rings (Occ3D-nuScenes)",
-                "Dynamic vs. Static Anomalies & Dirichlet Firewall (Robo3D)"
-            ],
-            horizontal=True
-        )
+        with col_sel2:
+            view_mode = st.selectbox(
+                "2. Choose What to View:",
+                [
+                    "Clean-Weather Performance by Distance (Radar Chart)",
+                    "Model Stability Under Blur & Snow (Line Trajectory)"
+                ]
+            )
 
         if "Clean-Weather" in view_mode:
-            col_chart, col_notes = st.columns([1.45, 1])
+            col_chart, col_notes = st.columns([1.35, 1])
             with col_chart:
-                st.markdown("##### Clean-Weather Accuracy & Distance-Bounded Evaluation")
-                st_echarts(options=render_efg_distance_chart(), height="380px", key="efg_dist_echarts")
+                st.markdown("##### Clean-Weather Accuracy Across Distance Rings")
+                st_echarts(options=render_efg_clean_radar_chart(), height="380px", key="efg_radar_chart")
             with col_notes:
                 st.markdown("""
                 <div class="method-box">
-                    <strong>Why 2D Pre-Training Remains Necessary at Long Range:</strong><br><br>
-                    • <strong>The Distance Bottleneck:</strong> As objects recede beyond 30 meters from the ego-vehicle, their projected 2D pixel volume diminishes rapidly. Training from scratch without ImageNet/nuImages 2D priors causes severe degradation in the Far (>30m) ring (dropping from 17.93 to 12.69 mIoU).<br>
-                    • <strong>Restoring Clean-Weather Semantics:</strong> Pairing our Evidential Feature Gate (EFG) with 2D pre-trained weights preserves long-range acuity (<strong>17.02 mIoU</strong> at >30m) and achieves <strong>30.44 overall mIoU</strong> and <strong>36.10 RayIoU</strong> on Occ3D-nuScenes.<br>
-                    • <strong>Real-Time Hardware Viability:</strong> Evaluated on a single NVIDIA RTX A4500 GPU, integrating EFG into SparseOcc adds only <strong>+0.01M parameters</strong> (80.12M → 80.13M) and maintains real-time inference at <strong>14.25 FPS</strong> (vs. 15.68 FPS baseline).
+                    <strong>What This Radar Chart Explains:</strong><br><br>
+                    • <strong>Why 2D Pre-Training is Used:</strong> 3D occupancy models use camera images to map the 3D space around a vehicle. When objects are far away (>30 meters), they appear very small in images. Without pre-trained 2D image weights, accuracy at long distances drops noticeably (from 17.93 to 12.69 mIoU).<br><br>
+                    • <strong>Keeping Clean-Weather Quality:</strong> Adding our Evidential Feature Gate (EFG) alongside pre-trained 2D weights keeps clean-weather accuracy close to the original baseline across all distances (<strong>30.44 mIoU</strong> and <strong>36.10 RayIoU</strong>).<br><br>
+                    • <strong>Lightweight on Hardware:</strong> Tested on a single RTX A4500 GPU, the gate adds only <strong>+0.01M parameters</strong> and runs in real time at <strong>14.25 FPS</strong>.
                 </div>
                 """, unsafe_allow_html=True)
         else:
-            col_chart, col_notes = st.columns([1.45, 1])
+            col_chart, col_notes = st.columns([1.35, 1])
             with col_chart:
-                st.markdown("##### Relative Robustness (RR%) & Static Fog Penetration")
-                st_echarts(options=render_efg_corruption_chart(), height="380px", key="efg_corr_echarts")
+                st.markdown("##### Percentage of Clean-Weather Performance Retained Under Stress")
+                st_echarts(options=render_efg_degradation_line_chart(), height="380px", key="efg_deg_line_chart")
             with col_notes:
                 st.markdown("""
                 <div class="method-box">
-                    <strong>The Spatio-Temporal Paradox & Dirichlet Feature Suppression:</strong><br><br>
-                    • <strong>Static vs. Dynamic Anomalies:</strong> 2D texture priors help pierce static noise like <em>Fog (Hard)</em> (0.494 Driveable RayIoU with EFG + Pretrain vs. 0.379 un-pretrained). However, under dynamic <em>Motion Blur</em> (edge loss) and <em>Snow</em> (geometric hallucination), pre-trained 2D features corrupt the 8-frame temporal history buffer ("Temporal Poisoning").<br>
-                    • <strong>Structural Retention:</strong> Under severe Motion Blur (Hard), the deterministic baseline retains only <strong>14.9%</strong> of its clean-weather performance, whereas our un-pretrained 3D evidential model retains <strong>61.2%</strong> Relative Robustness.<br>
-                    • <strong>Dirichlet Firewall Audit:</strong> Framing spatial extraction via Subjective Logic (<em>u<sub>t</sub> = K / S<sub>t</sub></em>, gate <em>G<sub>t</sub> = 1 − u<sub>t</sub></em>), an audit of 50,000 internal activations under severe blur shows EFG reduces mean activation magnitude by <strong>70.8%</strong> and squashes <strong>55.65%</strong> of corrupted spatial features to zero.
+                    <strong>What Happens Under Motion Blur and Snow:</strong><br><br>
+                    • <strong>The Trade-Off We Found:</strong> Pre-trained 2D backbones rely heavily on sharp edges and textures. While this helps in static fog, it struggles when motion blur smooths out edges or snow adds false textures—corrupting the model's 3D memory of previous frames.<br><br>
+                    • <strong>Measuring Uncertainty:</strong> Under severe motion blur, the standard baseline retains only <strong>14.9%</strong> of its normal geometric accuracy, whereas training with 3D volumetric priors and evidential gating retains <strong>61.2%</strong>.<br><br>
+                    • <strong>How the Gate Works:</strong> When input images become unfamiliar or blurry, the gate estimates uncertainty using Dirichlet logic and scales unreliable image features down toward zero so the 3D history stays clean.
                 </div>
                 """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.subheader("📚 Detailed Research Timeline")
+    st.subheader("📚 Research Summaries")
 
     render_card(
         title="Multi-Resolution BLE Indoor Localization for Nursing Care under Signal Loss, Class Imbalance, and Temporal Shift",
         subtitle="Role: Co-Researcher | Accepted at Journal of Physics: Conference Series (ISAS 2026 Challenge — Champion, 1st of 37 Teams)",
         date="2026",
         body=(
-            "Treated semantic room localization across 23 care-facility locations (47,121 labeled seconds, 25 BLE beacons) "
-            "as a temporally dependent measurement problem. Combined 1-second state reconstruction (≤3s carry-forward fill "
-            "and span-3 EWMA), parallel 10s Random Forest (100-dim) and 60s XGBoost (153-dim and 253-dim) representations, "
-            "fold-local topology/KL signal transfer, temperature-softened probability fusion (T = 1.25), and 11s centered "
-            "decoding. Conducted a five-protocol leakage-aware audit demonstrating how model rankings shift from naive "
-            "row-random splitting to strict chronological forward evaluation (improving Macro-F1 from 0.2561 to 0.3159)."
+            "Studied how to recognize staff locations across 23 rooms in a nursing-care facility using noisy Bluetooth "
+            "beacon signals. Because some visits are brief and others last much longer, we combined a short 10-second "
+            "Random Forest model with two 60-second XGBoost models. To handle rooms with very few recorded visits, we "
+            "transferred signal patterns from geometrically similar rooms strictly within each training fold. We also "
+            "compared five different validation methods to show how strongly model scores depend on temporal separation."
         ),
-        tools="Python, Scikit-learn, XGBoost, LightGBM, PyTorch (Causal TCN audit), Statistical Signal Processing"
+        tools="Python, Scikit-learn, XGBoost, LightGBM, PyTorch"
     )
-    with st.expander("📖 Read Full Abstract (BLE Indoor Localization)"):
+    with st.expander("📖 Read Original Paper Abstract (BLE Indoor Localization)"):
         st.write(
             "Indoor localization of nursing staff can support analysis of care routines using unobtrusive radio sensing. "
             "This paper is submitted as part of the ISAS 2026 Challenge and addresses its Bluetooth Low Energy (BLE) "
@@ -771,11 +819,7 @@ def research():
             "protocols. A standalone 60 s XGBoost configuration exceeds 0.91 Macro-F1 under row-random splitting (0.9102 "
             "unrounded) but reaches about 0.25 under strict-forward evaluation, demonstrating strong protocol sensitivity. "
             "In the internal strict-forward evaluation, the proposed system obtains Macro-F1 of 0.3159, Weighted-F1 of "
-            "0.5973, and accuracy of 0.6054, compared with 0.2561, 0.5293, and 0.5533 for the 10 s Random Forest baseline. "
-            "The results demonstrate strong protocol sensitivity and persistent minority-room difficulty in a deployment "
-            "documented to contain signal loss and unstable RSSI. The chronological folds also informed model and decoder "
-            "selection; therefore, these scores are internal development estimates rather than an untouched external "
-            "validation result."
+            "0.5973, and accuracy of 0.6054, compared with 0.2561, 0.5293, and 0.5533 for the 10 s Random Forest baseline."
         )
 
     render_card(
@@ -783,18 +827,16 @@ def research():
         subtitle="Role: Co-Researcher | Accepted at IEEE EAEEIE 2026 & WiML Symposium @ ICML 2026 (Supported by JSPS KAKENHI 26K07547)",
         date="2026",
         body=(
-            "Investigated structural vulnerabilities of 2D pre-trained convolutional backbones in vision-centric 3D "
-            "semantic occupancy prediction (SparseOcc on Occ3D-nuScenes and Robo3D). Demonstrated that while 2D priors "
-            "support long-range (>30m) semantic classification and static fog penetration, their texture bias collapses "
-            "under dynamic anomalies (motion blur and snow) and overwrites the 3D temporal history buffer ('Temporal "
-            "Poisoning'). Co-developed an Evidential Feature Gate (EFG) grounded in Dirichlet subjective logic to "
-            "quantify pixel-wise epistemic uncertainty and attenuate corrupted spatial features with +0.01M parameter "
-            "overhead at 14.25 FPS on an RTX A4500."
+            "Examined how 2D pre-trained image backbones affect 3D occupancy prediction for autonomous driving under bad "
+            "weather. We found a practical trade-off: 2D pre-training helps classify distant objects (>30m) and see through "
+            "static fog, but struggles under motion blur and snow, where corrupted image features overwrite the model's 3D "
+            "temporal memory. To help address this, we worked on an Evidential Feature Gate (EFG) that estimates uncertainty "
+            "and quiets down unreliable 2D features before they enter the 3D memory buffer, while adding minimal computing cost."
         ),
-        tools="PyTorch, OpenMMLab, SparseOcc, Occ3D-nuScenes, Robo3D, Evidential Deep Learning",
+        tools="PyTorch, OpenMMLab, SparseOcc, Occ3D-nuScenes, Robo3D",
         link="https://github.com/ummerubaiyat/spatio-temporal-paradox-of-2d-priors"
     )
-    with st.expander("📖 Read Full Abstract (3D Semantic Occupancy Prediction)"):
+    with st.expander("📖 Read Original Paper Abstract (3D Occupancy Prediction)"):
         st.write(
             "Vision-centric 3D semantic occupancy prediction has emerged as a highly scalable alternative to LiDAR for "
             "autonomous driving. Due to severe optimization challenges inherent in training complex 3D spatio-temporal "
@@ -805,11 +847,8 @@ def research():
             "robustness benchmark, we evaluate deterministic 2D spatial priors. We demonstrate that these priors excel at "
             "static noise penetration (e.g., Fog). Conversely, they exhibit severe structural collapse under environmental "
             "anomalies (e.g., Motion Blur and Snow). We show that this spatial failure induces 'Temporal Poisoning.' "
-            "During this cascade, corrupted instantaneous features overwrite and fundamentally blind downstream 3D temporal "
-            "routing mechanisms. To resolve this structural vulnerability without sacrificing clean-weather performance, we "
-            "propose an Evidential Feature Gate (EFG). Grounded in Dirichlet subjective logic, the EFG dynamically "
-            "quantifies out-of-distribution epistemic uncertainty at the feature level. It then mathematically suppresses "
-            "corrupted spatial inputs toward zero. This forms a protective firewall around the temporal history buffer."
+            "To resolve this structural vulnerability without sacrificing clean-weather performance, we propose an "
+            "Evidential Feature Gate (EFG) grounded in Dirichlet subjective logic."
         )
 
     render_card(
@@ -817,10 +856,10 @@ def research():
         subtitle="Role: Graduate Researcher | M.Sc. Dissertation, Statistics & Data Science, Jahangirnagar Univ.",
         date="Jun – Dec 2022",
         body=(
-            "Analyzed behavioral and communication factors related to divorce using a dataset curated by field "
-            "specialists. Applied feature engineering methods, including Recursive Feature Elimination (RFE) and "
-            "Shapley Additive Explanations (SHAP), to study influential variables. Used t-SNE for dimensionality "
-            "reduction and evaluated the predictive models using 5-fold cross-validation."
+            "Analyzed behavioral and communication survey data curated by field specialists to study key factors "
+            "associated with marital separation. Applied Recursive Feature Elimination (RFE) and SHAP values to "
+            "identify the most informative variables, used t-SNE to visualize data groupings, and evaluated the "
+            "models using 5-fold cross-validation."
         ),
         tools="Python (Pandas, NumPy, Scikit-learn, SHAP), t-SNE, Matplotlib"
     )
@@ -830,10 +869,9 @@ def research():
         subtitle="Role: Undergraduate Researcher | B.Sc. Dissertation, Dept. of CSE, Daffodil Int'l Univ.",
         date="Nov 2017 – Jul 2018",
         body=(
-            "Applied a computer vision methodology to estimate physical street dimensions from digital imagery "
-            "using OpenCV. Utilized grayscale filtering, Canny edge detection, and morphological operations to "
-            "identify object boundaries. Mapped pixel measurements to physical dimensions to categorize road "
-            "widths and evaluate urban aesthetics in Dhaka."
+            "Used basic computer vision techniques in OpenCV to estimate street widths from manually captured images "
+            "in Dhaka. Applied grayscale filtering, Canny edge detection, and contour tracing to find road boundaries, "
+            "and mapped pixel counts to physical measurements to compare streets against standard width criteria."
         ),
         link="https://www.youtube.com/watch?v=Ds8k-aPHVKk"
     )
@@ -1106,26 +1144,33 @@ def contact():
 
 
 def main():
-    tabs = st.tabs([
-        "🏠 Home",
-        "🎓 Education & Skills",
-        "🔬 Research",
-        "💼 Experience",
-        "📄 Publications & Honors",
-        "✉️ Contact"
-    ])
+    # Using a styled horizontal st.radio ensures only the active view is mounted in the DOM.
+    # This completely prevents hidden-tab 0px width bugs in st_echarts and st_lottie!
+    selected_page = st.radio(
+        "Navigation",
+        [
+            "🏠 Home",
+            "🎓 Education & Skills",
+            "🔬 Research",
+            "💼 Experience",
+            "📄 Publications & Honors",
+            "✉️ Contact"
+        ],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
 
-    with tabs[0]:
+    if selected_page == "🏠 Home":
         home_page()
-    with tabs[1]:
+    elif selected_page == "🎓 Education & Skills":
         education_and_skills()
-    with tabs[2]:
+    elif selected_page == "🔬 Research":
         research()
-    with tabs[3]:
+    elif selected_page == "💼 Experience":
         experience()
-    with tabs[4]:
+    elif selected_page == "📄 Publications & Honors":
         projects_and_publications()
-    with tabs[5]:
+    elif selected_page == "✉️ Contact":
         contact()
 
 
