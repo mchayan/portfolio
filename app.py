@@ -21,50 +21,71 @@ st.markdown("""
 
     /* Style the Top Navigation Radio Group as a Sleek Academic Navbar */
     div.row-widget.stRadio > div[role="radiogroup"] {
-        background-color: #262730;
-        border-radius: 8px;
-        padding: 6px 8px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 1.5rem;
-        justify-content: space-between;
+        background-color: #1e293b !important;
+        border: 1px solid #334155 !important;
+        border-radius: 8px !important;
+        padding: 6px 8px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        margin-bottom: 1.5rem !important;
+        justify-content: space-between !important;
     }
+
+    /* Unselected Tab Labels - High-contrast readable base state */
     div.row-widget.stRadio > div[role="radiogroup"] > label {
-        background-color: transparent !important;
+        background-color: #334155 !important;
+        border: 1px solid #475569 !important;
         border-radius: 6px !important;
         padding: 10px 16px !important;
         margin: 0 !important;
-        flex: 1 1 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
+        flex: 1 1 auto !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease-in-out !important;
     }
-    div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
-        background-color: #3b3d4a !important;
-    }
-    /* Hide the default radio circle */
+
+    /* Hide the default radio circle button */
     div.row-widget.stRadio > div[role="radiogroup"] > label > div:first-child {
         display: none !important;
     }
-    /* Text inside the navbar */
-    div.row-widget.stRadio > div[role="radiogroup"] > label > div[data-testid="stMarkdownContainer"] p {
-        color: #e2e8f0 !important;
+
+    /* Text inside unselected labels - Bright crisp white */
+    div.row-widget.stRadio > div[role="radiogroup"] > label p,
+    div.row-widget.stRadio > div[role="radiogroup"] > label span,
+    div.row-widget.stRadio > div[role="radiogroup"] > label div[data-testid="stMarkdownContainer"] p {
+        color: #f8fafc !important;
         font-size: 0.95rem !important;
         font-weight: 500 !important;
         margin: 0 !important;
-        text-align: center;
+        text-align: center !important;
+        letter-spacing: 0.2px !important;
     }
-    /* Highlight the active radio tab (Modern browsers supporting :has) */
+
+    /* Hover State - Clear visual feedback */
+    div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
+        background-color: #475569 !important;
+        border-color: #00CED1 !important;
+    }
+    div.row-widget.stRadio > div[role="radiogroup"] > label:hover p,
+    div.row-widget.stRadio > div[role="radiogroup"] > label:hover span {
+        color: #ffffff !important;
+    }
+
+    /* Selected Active State - Crisp teal with bold pure white text */
     div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) {
         background-color: #008B8B !important;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        border-color: #20B2AA !important;
+        box-shadow: 0 2px 6px rgba(0, 139, 139, 0.4) !important;
     }
-    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) p {
+    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) p,
+    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) span,
+    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) div[data-testid="stMarkdownContainer"] p {
         color: #ffffff !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
     }
 
     /* Homepage Typography */
@@ -302,7 +323,6 @@ def render_nightingale_rose_diagram():
 
 
 def render_ble_protocol_line_chart():
-    # Line trajectory chart showing how scores change as temporal separation increases
     return {
         "tooltip": {"trigger": "axis"},
         "legend": {"top": "bottom"},
@@ -367,7 +387,6 @@ def render_ble_protocol_line_chart():
 
 
 def render_ble_ablation_combo_chart():
-    # Combination bar & line chart showing step-by-step ensemble progression
     return {
         "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
         "legend": {"top": "bottom"},
@@ -417,7 +436,6 @@ def render_ble_ablation_combo_chart():
 
 
 def render_efg_clean_radar_chart():
-    # Radar chart comparing clean-weather accuracy across distances
     return {
         "tooltip": {"trigger": "item"},
         "legend": {"top": "bottom"},
@@ -463,7 +481,6 @@ def render_efg_clean_radar_chart():
 
 
 def render_efg_degradation_line_chart():
-    # Line chart showing Relative Robustness (RR%) across corruption severities
     return {
         "tooltip": {"trigger": "axis"},
         "legend": {"top": "bottom"},
@@ -537,11 +554,9 @@ def render_card(title, subtitle, date, body, tools=None, link=None):
 
 
 def home_page():
-    # Header Section
     st.markdown('<h1 class="main-title">Hi, I am Manoj Roy 👋</h1>', unsafe_allow_html=True)
     st.markdown('<h2 class="sub-title">Data Enthusiast & Researcher</h2>', unsafe_allow_html=True)
 
-    # Academic At-a-Glance Ribbon
     st.markdown("""
         <div class="stat-ribbon">
             <div class="stat-box">
@@ -563,7 +578,6 @@ def home_page():
         </div>
     """, unsafe_allow_html=True)
 
-    # General, Humble Academic Introduction
     st.markdown(
         """
         <div class="intro-text">
@@ -575,7 +589,6 @@ def home_page():
         unsafe_allow_html=True
     )
 
-    # Skills Diagram & Lottie Animation Section
     left_column, right_column = st.columns([2, 1])
 
     with left_column:
@@ -695,7 +708,7 @@ def research():
         <div class="cv-card" style="background-color: #f8fafc; border-left-color: #2d3748;">
             <div class="cv-card-title" style="margin-bottom: 0.3rem;">🔎 Interactive Research Explorer</div>
             <p class="cv-card-body">
-                Below is a simple, visual overview of our two recent studies. Use the dropdown menus to inspect how the models behave under different evaluation setups and real-world conditions.
+                Below is an interactive overview of our two recent studies. Select a study to explore how the models perform across different validation methods and real-world conditions.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -1144,8 +1157,6 @@ def contact():
 
 
 def main():
-    # Using a styled horizontal st.radio ensures only the active view is mounted in the DOM.
-    # This completely prevents hidden-tab 0px width bugs in st_echarts and st_lottie!
     selected_page = st.radio(
         "Navigation",
         [
