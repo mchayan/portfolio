@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for Academic Styling, Top Radio Navbar, and Responsive Layout
+# Custom CSS for Academic Styling, High-Contrast Navbar, and Responsive Layout
 st.markdown("""
     <style>
     /* Main Container */
@@ -19,32 +19,33 @@ st.markdown("""
         padding: 1rem 2rem;
     }
 
-    /* Style the Top Navigation Radio Group as a Sleek Academic Navbar */
+    /* Clean Academic Top Navbar (Light Paper Aesthetic with Maximum Contrast) */
     div.row-widget.stRadio > div[role="radiogroup"] {
-        background-color: #1e293b !important;
-        border: 1px solid #334155 !important;
-        border-radius: 8px !important;
-        padding: 6px 8px !important;
+        background-color: #f1f5f9 !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 10px !important;
+        padding: 6px !important;
         display: flex !important;
         flex-wrap: wrap !important;
-        gap: 6px !important;
-        margin-bottom: 1.5rem !important;
+        gap: 8px !important;
+        margin-bottom: 2rem !important;
         justify-content: space-between !important;
     }
 
-    /* Unselected Tab Labels - High-contrast readable base state */
+    /* Unselected Buttons: Crisp White Tiles with Dark Charcoal Text */
     div.row-widget.stRadio > div[role="radiogroup"] > label {
-        background-color: #334155 !important;
-        border: 1px solid #475569 !important;
-        border-radius: 6px !important;
-        padding: 10px 16px !important;
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 7px !important;
+        padding: 9px 18px !important;
         margin: 0 !important;
         flex: 1 1 auto !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         cursor: pointer !important;
-        transition: all 0.2s ease-in-out !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.15s ease-in-out !important;
     }
 
     /* Hide the default radio circle button */
@@ -52,40 +53,34 @@ st.markdown("""
         display: none !important;
     }
 
-    /* Text inside unselected labels - Bright crisp white */
-    div.row-widget.stRadio > div[role="radiogroup"] > label p,
-    div.row-widget.stRadio > div[role="radiogroup"] > label span,
-    div.row-widget.stRadio > div[role="radiogroup"] > label div[data-testid="stMarkdownContainer"] p {
-        color: #f8fafc !important;
-        font-size: 0.95rem !important;
-        font-weight: 500 !important;
+    /* High-contrast unselected text: Deep Charcoal across all inner tags */
+    div.row-widget.stRadio > div[role="radiogroup"] > label * {
+        color: #1e293b !important;
+        font-size: 0.96rem !important;
+        font-weight: 600 !important;
         margin: 0 !important;
         text-align: center !important;
-        letter-spacing: 0.2px !important;
+        opacity: 1 !important;
     }
 
-    /* Hover State - Clear visual feedback */
+    /* Hover State: Subtle mint/teal tint */
     div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
-        background-color: #475569 !important;
-        border-color: #00CED1 !important;
+        background-color: #e6fffa !important;
+        border-color: #008B8B !important;
     }
-    div.row-widget.stRadio > div[role="radiogroup"] > label:hover p,
-    div.row-widget.stRadio > div[role="radiogroup"] > label:hover span {
-        color: #ffffff !important;
+    div.row-widget.stRadio > div[role="radiogroup"] > label:hover * {
+        color: #006666 !important;
     }
 
-    /* Selected Active State - Crisp teal with bold pure white text */
+    /* Active Selected Button: Solid Academic Teal with Pure White Bold Text */
     div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) {
         background-color: #008B8B !important;
-        border-color: #20B2AA !important;
-        box-shadow: 0 2px 6px rgba(0, 139, 139, 0.4) !important;
+        border-color: #007070 !important;
+        box-shadow: 0 2px 5px rgba(0, 139, 139, 0.35) !important;
     }
-    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) p,
-    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) span,
-    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) div[data-testid="stMarkdownContainer"] p {
+    div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) * {
         color: #ffffff !important;
         font-weight: 700 !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
     }
 
     /* Homepage Typography */
@@ -632,16 +627,16 @@ def education_and_skills():
 
         st.subheader("🛠️ Core Competencies")
         skills_data = {
-            "Statistical Analysis & ML": [
+            "Statistical Analysis \& ML": [
                 "Applied Statistics", "Deep Learning", "Computer Vision",
                 "Predictive Modeling", "Feature Engineering", "Quantitative Problem Solving"
             ],
             "Programming Languages": ["Python", "R", "SQL", "Java"],
-            "Data Science & AI Frameworks": [
+            "Data Science \& AI Frameworks": [
                 "PyTorch", "OpenMMLab", "OpenCV", "Scikit-learn", "Pandas", "NumPy"
             ],
-            "Data Visualization & BI": ["Power BI", "Tableau", "Matplotlib", "Seaborn"],
-            "Research & Development Tools": [
+            "Data Visualization \& BI": ["Power BI", "Tableau", "Matplotlib", "Seaborn"],
+            "Research \& Development Tools": [
                 "LaTeX", "Git", "Docker", "Linux (Ubuntu/WSL2)",
                 "Android Studio", "Unity", "Kobo Toolbox", "Survey Solutions"
             ],
