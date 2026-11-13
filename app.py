@@ -9,9 +9,81 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for Academic Styling, High-Contrast Navbar, and Responsive Layout
+# Custom CSS for Academic Styling, High-Contrast Navbar, Dark/Light Mode Support, and Responsive Layout
 st.markdown("""
     <style>
+    /* Theme-aware CSS variables (Light Mode Defaults) */
+    :root {
+        --card-bg: #ffffff;
+        --card-alt-bg: #f8fafc;
+        --intro-bg: #fcfcfd;
+        --border-color: #e2e8f0;
+        --border-strong: #cbd5e1;
+        --text-primary: #1e293b;
+        --text-heading: #1a202c;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --accent-teal: #008B8B;
+        --accent-teal-hover: #006666;
+        --accent-subtitle: #006666;
+        --badge-bg: #f0f4f8;
+        --badge-text: #2c3e50;
+        --badge-border: #dce4ec;
+        --date-bg: #f1f5f9;
+        --nav-container-bg: #f1f5f9;
+        --nav-item-bg: #ffffff;
+        --nav-hover-bg: #e6fffa;
+    }
+
+    /* Automatic Dark Mode Overrides */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --card-bg: #1e293b;
+            --card-alt-bg: #16202e;
+            --intro-bg: #1e293b;
+            --border-color: #334155;
+            --border-strong: #475569;
+            --text-primary: #f1f5f9;
+            --text-heading: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-teal: #0d9488;
+            --accent-teal-hover: #14b8a6;
+            --accent-subtitle: #2dd4bf;
+            --badge-bg: #0f172a;
+            --badge-text: #e2e8f0;
+            --badge-border: #334155;
+            --date-bg: #0f172a;
+            --nav-container-bg: #0f172a;
+            --nav-item-bg: #1e293b;
+            --nav-hover-bg: #134e4a;
+        }
+    }
+
+    /* Also respect Streamlit's internal dark theme attribute if toggled manually in Settings */
+    [data-testid="stAppViewContainer"][data-theme="dark"],
+    .stApp[data-theme="dark"] {
+        --card-bg: #1e293b;
+        --card-alt-bg: #16202e;
+        --intro-bg: #1e293b;
+        --border-color: #334155;
+        --border-strong: #475569;
+        --text-primary: #f1f5f9;
+        --text-heading: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --accent-teal: #0d9488;
+        --accent-teal-hover: #14b8a6;
+        --accent-subtitle: #2dd4bf;
+        --badge-bg: #0f172a;
+        --badge-text: #e2e8f0;
+        --badge-border: #334155;
+        --date-bg: #0f172a;
+        --nav-container-bg: #0f172a;
+        --nav-item-bg: #1e293b;
+        --nav-hover-bg: #134e4a;
+    }
+
     /* Main Container */
     .stApp {
         max-width: 1200px;
@@ -19,10 +91,10 @@ st.markdown("""
         padding: 1rem 2rem;
     }
 
-    /* Clean Academic Top Navbar (Light Paper Aesthetic with Maximum Contrast) */
+    /* Clean Academic Top Navbar */
     div.row-widget.stRadio > div[role="radiogroup"] {
-        background-color: #f1f5f9 !important;
-        border: 1.5px solid #cbd5e1 !important;
+        background-color: var(--nav-container-bg) !important;
+        border: 1.5px solid var(--border-strong) !important;
         border-radius: 10px !important;
         padding: 6px !important;
         display: flex !important;
@@ -32,10 +104,10 @@ st.markdown("""
         justify-content: space-between !important;
     }
 
-    /* Unselected Buttons: Crisp White Tiles with Dark Charcoal Text */
+    /* Unselected Buttons */
     div.row-widget.stRadio > div[role="radiogroup"] > label {
-        background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
+        background-color: var(--nav-item-bg) !important;
+        border: 1px solid var(--border-strong) !important;
         border-radius: 7px !important;
         padding: 9px 18px !important;
         margin: 0 !important;
@@ -44,7 +116,7 @@ st.markdown("""
         justify-content: center !important;
         align-items: center !important;
         cursor: pointer !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
         transition: all 0.15s ease-in-out !important;
     }
 
@@ -53,9 +125,9 @@ st.markdown("""
         display: none !important;
     }
 
-    /* High-contrast unselected text: Deep Charcoal across all inner tags */
+    /* High-contrast unselected text */
     div.row-widget.stRadio > div[role="radiogroup"] > label * {
-        color: #1e293b !important;
+        color: var(--text-primary) !important;
         font-size: 0.96rem !important;
         font-weight: 600 !important;
         margin: 0 !important;
@@ -63,19 +135,19 @@ st.markdown("""
         opacity: 1 !important;
     }
 
-    /* Hover State: Subtle mint/teal tint */
+    /* Hover State */
     div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
-        background-color: #e6fffa !important;
-        border-color: #008B8B !important;
+        background-color: var(--nav-hover-bg) !important;
+        border-color: var(--accent-teal) !important;
     }
     div.row-widget.stRadio > div[role="radiogroup"] > label:hover * {
-        color: #006666 !important;
+        color: var(--accent-subtitle) !important;
     }
 
-    /* Active Selected Button: Solid Academic Teal with Pure White Bold Text */
+    /* Active Selected Button */
     div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) {
-        background-color: #008B8B !important;
-        border-color: #007070 !important;
+        background-color: var(--accent-teal) !important;
+        border-color: var(--accent-teal) !important;
         box-shadow: 0 2px 5px rgba(0, 139, 139, 0.35) !important;
     }
     div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) * {
@@ -88,12 +160,12 @@ st.markdown("""
         font-size: 3.3rem;
         font-weight: 700;
         margin-bottom: 0.2rem;
-        color: #1a202c;
+        color: var(--text-heading);
         letter-spacing: -0.5px;
     }
     .sub-title {
         font-size: 1.65rem;
-        color: #4a5568;
+        color: var(--text-secondary);
         font-weight: 500;
         margin-bottom: 1.5rem;
     }
@@ -105,18 +177,23 @@ st.markdown("""
         max-width: 820px;
         margin: 0 auto 1.8rem auto;
         padding: 24px 28px;
-        background-color: #fcfcfd;
-        border: 1px solid #edf2f7;
-        border-left: 4px solid #008B8B;
+        background-color: var(--intro-bg);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--accent-teal);
         border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .intro-text p {
+        color: var(--text-primary);
+        margin: 0;
     }
     .first-letter {
-        font-size: 50px;
+        font-size: 46px;
         font-weight: bold;
-        color: #2d3748;
+        color: var(--text-heading);
         margin: 0;
-        padding-right: 12px;
+        padding-right: 10px;
         float: left;
         line-height: 0.95;
     }
@@ -128,12 +205,13 @@ st.markdown("""
         text-align: center;
         margin-top: 1rem;
         padding: 1rem;
-        background-color: #f8fafc;
+        background-color: var(--card-alt-bg);
+        color: var(--text-primary);
         border-radius: 6px;
-        border: 1px dashed #cbd5e1;
+        border: 1px dashed var(--border-strong);
     }
     .highlight {
-        color: #008B8B;
+        color: var(--accent-subtitle);
         font-weight: bold;
     }
 
@@ -145,23 +223,23 @@ st.markdown("""
         margin-bottom: 2rem;
     }
     .stat-box {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-top: 3px solid #008B8B;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-top: 3px solid var(--accent-teal);
         border-radius: 6px;
         padding: 0.9rem 1rem;
         text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .stat-value {
         font-size: 1.4rem;
         font-weight: 700;
-        color: #1a202c;
+        color: var(--text-heading);
         font-family: 'Georgia', serif;
     }
     .stat-label {
         font-size: 0.8rem;
-        color: #64748b;
+        color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-top: 0.2rem;
@@ -169,17 +247,25 @@ st.markdown("""
 
     /* Clean Academic Cards */
     .cv-card {
-        background-color: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-left: 4px solid #008B8B;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--accent-teal);
         border-radius: 6px;
         padding: 1.15rem 1.35rem;
         margin-bottom: 1rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
         transition: box-shadow 0.15s ease;
     }
+    .cv-card-alt {
+        background-color: var(--card-alt-bg);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--border-strong);
+        border-radius: 6px;
+        padding: 1.15rem 1.35rem;
+        margin-bottom: 1rem;
+    }
     .cv-card:hover {
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
     .cv-card-header {
         display: flex;
@@ -192,13 +278,18 @@ st.markdown("""
     .cv-card-title {
         font-size: 1.08rem;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--text-heading);
         margin: 0;
+    }
+    .cv-card-title a {
+        color: var(--text-heading) !important;
+        text-decoration: underline;
     }
     .cv-card-date {
         font-size: 0.85rem;
-        color: #475569;
-        background-color: #f1f5f9;
+        color: var(--text-secondary);
+        background-color: var(--date-bg);
+        border: 1px solid var(--border-color);
         padding: 2px 8px;
         border-radius: 4px;
         font-weight: 500;
@@ -206,25 +297,53 @@ st.markdown("""
     }
     .cv-card-subtitle {
         font-size: 0.93rem;
-        color: #006666;
+        color: var(--accent-subtitle);
         font-style: italic;
         margin-bottom: 0.5rem;
     }
     .cv-card-body {
         font-size: 0.94rem;
-        color: #334155;
+        color: var(--text-primary);
         line-height: 1.65;
         margin: 0;
+    }
+    .cv-card-body a {
+        color: var(--accent-subtitle) !important;
+    }
+    .cv-card-tools {
+        margin-top: 0.5rem;
+        font-size: 0.86rem;
+        color: var(--text-secondary);
+    }
+
+    /* Certification List Row */
+    .cert-row {
+        padding: 7px 0;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+    .cert-row a {
+        font-weight: 600;
+        color: var(--text-heading) !important;
+        text-decoration: none;
+    }
+    .cert-row a:hover {
+        color: var(--accent-subtitle) !important;
+        text-decoration: underline;
+    }
+    .cert-org {
+        color: var(--text-muted);
+        font-size: 0.9rem;
     }
 
     /* Easy-to-Read Note Box */
     .method-box {
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
+        background-color: var(--card-alt-bg);
+        border: 1px solid var(--border-color);
         border-radius: 6px;
         padding: 1.1rem 1.25rem;
         font-size: 0.92rem;
-        color: #334155;
+        color: var(--text-primary);
         line-height: 1.65;
         margin-bottom: 1rem;
     }
@@ -232,14 +351,14 @@ st.markdown("""
     /* Skill & Topic Badges */
     .skill-badge {
         display: inline-block;
-        background-color: #f0f4f8;
-        color: #2c3e50;
+        background-color: var(--badge-bg);
+        color: var(--badge-text);
         padding: 5px 11px;
         margin: 3px 5px 3px 0;
         border-radius: 4px;
         font-size: 0.86rem;
         font-weight: 500;
-        border: 1px solid #dce4ec;
+        border: 1px solid var(--badge-border);
     }
 
     /* Responsive Adjustments for Mobile & Tablet */
@@ -287,7 +406,10 @@ def load_lottieurl(url: str):
 def render_nightingale_rose_diagram():
     return {
         "tooltip": {"trigger": "item", "formatter": "{b}: {c} ({d}%)"},
-        "legend": {"top": "bottom"},
+        "legend": {
+            "top": "bottom",
+            "textStyle": {"color": "#8892b0"}
+        },
         "toolbox": {
             "show": True,
             "feature": {
@@ -305,6 +427,7 @@ def render_nightingale_rose_diagram():
                 "center": ["50%", "45%"],
                 "roseType": "area",
                 "itemStyle": {"borderRadius": 8},
+                "label": {"color": "#8892b0"},
                 "data": [
                     {"value": 335, "name": "Statistical"},
                     {"value": 310, "name": "Technical"},
@@ -320,11 +443,12 @@ def render_nightingale_rose_diagram():
 def render_ble_protocol_line_chart():
     return {
         "tooltip": {"trigger": "axis"},
-        "legend": {"top": "bottom"},
+        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
         "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
             "boundaryGap": False,
+            "axisLabel": {"color": "#8892b0"},
             "data": [
                 "Row-Random\n(Overlapping)",
                 "45s Block\n(Purged)",
@@ -336,6 +460,9 @@ def render_ble_protocol_line_chart():
         "yAxis": {
             "type": "value",
             "name": "Macro-F1 Score",
+            "nameTextStyle": {"color": "#8892b0"},
+            "axisLabel": {"color": "#8892b0"},
+            "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.2)"}},
             "min": 0.15,
             "max": 0.95
         },
@@ -346,9 +473,9 @@ def render_ble_protocol_line_chart():
                 "smooth": True,
                 "symbolSize": 9,
                 "data": [0.901, 0.348, 0.280, 0.322, 0.316],
-                "itemStyle": {"color": "#008B8B"},
+                "itemStyle": {"color": "#14b8a6"},
                 "lineStyle": {"width": 3.5},
-                "areaStyle": {"opacity": 0.12, "color": "#008B8B"}
+                "areaStyle": {"opacity": 0.15, "color": "#14b8a6"}
             },
             {
                 "name": "60s Rich XGBoost (Standalone)",
@@ -384,10 +511,11 @@ def render_ble_protocol_line_chart():
 def render_ble_ablation_combo_chart():
     return {
         "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
-        "legend": {"top": "bottom"},
+        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
         "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
+            "axisLabel": {"color": "#8892b0"},
             "data": [
                 "10s RF\nBaseline",
                 "Multi-Resolution\nFusion (Untargeted)",
@@ -396,8 +524,24 @@ def render_ble_ablation_combo_chart():
             ]
         },
         "yAxis": [
-            {"type": "value", "name": "Macro-F1", "min": 0.20, "max": 0.35},
-            {"type": "value", "name": "Accuracy / Weighted-F1", "min": 0.50, "max": 0.65}
+            {
+                "type": "value",
+                "name": "Macro-F1",
+                "nameTextStyle": {"color": "#8892b0"},
+                "axisLabel": {"color": "#8892b0"},
+                "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.2)"}},
+                "min": 0.20,
+                "max": 0.35
+            },
+            {
+                "type": "value",
+                "name": "Accuracy / Weighted-F1",
+                "nameTextStyle": {"color": "#8892b0"},
+                "axisLabel": {"color": "#8892b0"},
+                "splitLine": {"show": False},
+                "min": 0.50,
+                "max": 0.65
+            }
         ],
         "series": [
             {
@@ -406,7 +550,7 @@ def render_ble_ablation_combo_chart():
                 "barWidth": "38%",
                 "yAxisIndex": 0,
                 "data": [0.2561, 0.3051, 0.3077, 0.3159],
-                "itemStyle": {"color": "#008B8B", "borderRadius": [4, 4, 0, 0]}
+                "itemStyle": {"color": "#14b8a6", "borderRadius": [4, 4, 0, 0]}
             },
             {
                 "name": "Overall Accuracy",
@@ -414,7 +558,7 @@ def render_ble_ablation_combo_chart():
                 "yAxisIndex": 1,
                 "symbolSize": 9,
                 "data": [0.5533, 0.6048, 0.6051, 0.6054],
-                "itemStyle": {"color": "#0f172a"},
+                "itemStyle": {"color": "#38bdf8"},
                 "lineStyle": {"width": 3}
             },
             {
@@ -433,8 +577,11 @@ def render_ble_ablation_combo_chart():
 def render_efg_clean_radar_chart():
     return {
         "tooltip": {"trigger": "item"},
-        "legend": {"top": "bottom"},
+        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
         "radar": {
+            "axisName": {"color": "#8892b0"},
+            "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.25)"}},
+            "splitArea": {"areaStyle": {"color": ["rgba(148, 163, 184, 0.04)", "rgba(148, 163, 184, 0.08)"]}},
             "indicator": [
                 {"name": "Overall mIoU\n(Max 35)", "max": 35},
                 {"name": "Overall RayIoU\n(Max 40)", "max": 40},
@@ -459,8 +606,8 @@ def render_efg_clean_radar_chart():
                     {
                         "value": [30.44, 36.10, 41.07, 30.60, 17.02],
                         "name": "EFG + 2D Pretraining (Proposed)",
-                        "itemStyle": {"color": "#008B8B"},
-                        "areaStyle": {"opacity": 0.2, "color": "#008B8B"},
+                        "itemStyle": {"color": "#14b8a6"},
+                        "areaStyle": {"opacity": 0.2, "color": "#14b8a6"},
                         "lineStyle": {"width": 3}
                     },
                     {
@@ -478,11 +625,12 @@ def render_efg_clean_radar_chart():
 def render_efg_degradation_line_chart():
     return {
         "tooltip": {"trigger": "axis"},
-        "legend": {"top": "bottom"},
+        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
         "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
             "boundaryGap": False,
+            "axisLabel": {"color": "#8892b0"},
             "data": [
                 "Motion Blur\n(Easy)",
                 "Motion Blur\n(Mid)",
@@ -495,6 +643,9 @@ def render_efg_degradation_line_chart():
         "yAxis": {
             "type": "value",
             "name": "Relative Robustness Retained (%)",
+            "nameTextStyle": {"color": "#8892b0"},
+            "axisLabel": {"color": "#8892b0"},
+            "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.2)"}},
             "min": 0,
             "max": 100
         },
@@ -505,9 +656,9 @@ def render_efg_degradation_line_chart():
                 "smooth": True,
                 "symbolSize": 9,
                 "data": [93.0, 71.0, 61.2, 34.8, 16.1, 10.4],
-                "itemStyle": {"color": "#008B8B"},
+                "itemStyle": {"color": "#14b8a6"},
                 "lineStyle": {"width": 3.5},
-                "areaStyle": {"opacity": 0.12, "color": "#008B8B"}
+                "areaStyle": {"opacity": 0.15, "color": "#14b8a6"}
             },
             {
                 "name": "Standard Pre-Trained Baseline (SparseOcc)",
@@ -524,13 +675,12 @@ def render_efg_degradation_line_chart():
 
 def render_card(title, subtitle, date, body, tools=None, link=None):
     title_html = (
-        f'<a href="{link}" target="_blank" style="color: #1e293b; text-decoration: underline;">{title} 🔗</a>'
+        f'<a href="{link}" target="_blank">{title} 🔗</a>'
         if link else title
     )
     subtitle_html = f'<div class="cv-card-subtitle">{subtitle}</div>' if subtitle else ""
     tools_html = (
-        f'<div style="margin-top: 0.5rem; font-size: 0.86rem; color: #475569;">'
-        f'<strong>Tools:</strong> {tools}</div>'
+        f'<div class="cv-card-tools"><strong>Tools:</strong> {tools}</div>'
         if tools else ""
     )
     body_html = f'<p class="cv-card-body">{body}</p>' if body else ""
@@ -576,9 +726,7 @@ def home_page():
     st.markdown(
         """
         <div class="intro-text">
-        <p><span class="first-letter">A</span> dedicated data enthusiast with a Master's in Applied Statistics and Data Science and a Bachelor's in Computer Science and Engineering, I approach research through a foundation of statistical reasoning, careful problem formulation, and empirical validation. Rather than confining my curiosity to a single narrow domain, I enjoy studying how data behaves under practical real-world constraints—such as measurement noise, class imbalance, temporal shift, and distributional anomalies—and building transparent, reproducible pipelines to investigate these problems.</p>
-        
-        <p>As an eager learner and collaborative researcher, I value methodological honesty, clean experimental design, and clear analytical communication. Whether working with time-dependent sensor streams, computer vision architectures, behavioral datasets, or guiding students through foundational data concepts, I strive to contribute thoughtfully and learn continuously within any research team.</p>
+        <p><span class="first-letter">I</span> hold degrees in Applied Statistics (M.Sc.) and Computer Science (B.Sc.). My background combines statistical methodology with applied machine learning, focusing on evaluation protocol design and robustness under real-world data constraints. Currently, I teach data analysis and collaborate on applied machine learning research.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -627,16 +775,16 @@ def education_and_skills():
 
         st.subheader("🛠️ Core Competencies")
         skills_data = {
-            "Statistical Analysis \& ML": [
+            "Statistical Analysis & ML": [
                 "Applied Statistics", "Deep Learning", "Computer Vision",
                 "Predictive Modeling", "Feature Engineering", "Quantitative Problem Solving"
             ],
             "Programming Languages": ["Python", "R", "SQL", "Java"],
-            "Data Science \& AI Frameworks": [
+            "Data Science & AI Frameworks": [
                 "PyTorch", "OpenMMLab", "OpenCV", "Scikit-learn", "Pandas", "NumPy"
             ],
-            "Data Visualization \& BI": ["Power BI", "Tableau", "Matplotlib", "Seaborn"],
-            "Research \& Development Tools": [
+            "Data Visualization & BI": ["Power BI", "Tableau", "Matplotlib", "Seaborn"],
+            "Research & Development Tools": [
                 "LaTeX", "Git", "Docker", "Linux (Ubuntu/WSL2)",
                 "Android Studio", "Unity", "Kobo Toolbox", "Survey Solutions"
             ],
@@ -668,9 +816,9 @@ def education_and_skills():
         for title, org, year, domain, url in certifications:
             if cert_filter == "All (9)" or cert_filter == domain:
                 st.markdown(
-                    f'<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9;">'
-                    f'🔹 <a href="{url}" target="_blank" style="font-weight:600; color:#1e293b;">{title}</a> '
-                    f'<span style="color:#64748b; font-size:0.9rem;">| {org} ({year})</span></div>',
+                    f'<div class="cert-row">'
+                    f'🔹 <a href="{url}" target="_blank">{title}</a> '
+                    f'<span class="cert-org">| {org} ({year})</span></div>',
                     unsafe_allow_html=True
                 )
 
@@ -700,7 +848,7 @@ def research():
     st.header("Academic Research")
 
     st.markdown("""
-        <div class="cv-card" style="background-color: #f8fafc; border-left-color: #2d3748;">
+        <div class="cv-card-alt">
             <div class="cv-card-title" style="margin-bottom: 0.3rem;">🔎 Interactive Research Explorer</div>
             <p class="cv-card-body">
                 Below is an interactive overview of our two recent studies. Select a study to explore how the models perform across different validation methods and real-world conditions.
@@ -1108,7 +1256,7 @@ def contact():
     with col1:
         st.markdown("""
         <div class="cv-card">
-            <h3 style="margin-top: 0; color: #1e293b;">Get in Touch</h3>
+            <h3 style="margin-top: 0;">Get in Touch</h3>
             <p class="cv-card-body" style="margin-bottom: 1.2rem;">
                 I welcome discussions regarding academic research collaborations, statistical modeling, 
                 graduate research opportunities, and data analysis instruction.
@@ -1128,7 +1276,7 @@ def contact():
     with col2:
         st.markdown("""
         <div class="cv-card">
-            <h3 style="margin-top: 0; color: #1e293b;">Research Capabilities & Interests</h3>
+            <h3 style="margin-top: 0;">Research Capabilities & Interests</h3>
             <p class="cv-card-body" style="margin-bottom: 0.6rem;">
                 <strong>Methodological Areas:</strong>
             </p>
