@@ -9,81 +9,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for Academic Styling, High-Contrast Navbar, Dark/Light Mode Support, and Responsive Layout
+# Custom CSS synced perfectly to Streamlit's Native Theme Variables for flawless Light & Dark mode support
 st.markdown("""
     <style>
-    /* Theme-aware CSS variables (Light Mode Defaults) */
-    :root {
-        --card-bg: #ffffff;
-        --card-alt-bg: #f8fafc;
-        --intro-bg: #fcfcfd;
-        --border-color: #e2e8f0;
-        --border-strong: #cbd5e1;
-        --text-primary: #1e293b;
-        --text-heading: #1a202c;
-        --text-secondary: #475569;
-        --text-muted: #64748b;
-        --accent-teal: #008B8B;
-        --accent-teal-hover: #006666;
-        --accent-subtitle: #006666;
-        --badge-bg: #f0f4f8;
-        --badge-text: #2c3e50;
-        --badge-border: #dce4ec;
-        --date-bg: #f1f5f9;
-        --nav-container-bg: #f1f5f9;
-        --nav-item-bg: #ffffff;
-        --nav-hover-bg: #e6fffa;
-    }
-
-    /* Automatic Dark Mode Overrides */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --card-bg: #1e293b;
-            --card-alt-bg: #16202e;
-            --intro-bg: #1e293b;
-            --border-color: #334155;
-            --border-strong: #475569;
-            --text-primary: #f1f5f9;
-            --text-heading: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --accent-teal: #0d9488;
-            --accent-teal-hover: #14b8a6;
-            --accent-subtitle: #2dd4bf;
-            --badge-bg: #0f172a;
-            --badge-text: #e2e8f0;
-            --badge-border: #334155;
-            --date-bg: #0f172a;
-            --nav-container-bg: #0f172a;
-            --nav-item-bg: #1e293b;
-            --nav-hover-bg: #134e4a;
-        }
-    }
-
-    /* Also respect Streamlit's internal dark theme attribute if toggled manually in Settings */
-    [data-testid="stAppViewContainer"][data-theme="dark"],
-    .stApp[data-theme="dark"] {
-        --card-bg: #1e293b;
-        --card-alt-bg: #16202e;
-        --intro-bg: #1e293b;
-        --border-color: #334155;
-        --border-strong: #475569;
-        --text-primary: #f1f5f9;
-        --text-heading: #f8fafc;
-        --text-secondary: #cbd5e1;
-        --text-muted: #94a3b8;
-        --accent-teal: #0d9488;
-        --accent-teal-hover: #14b8a6;
-        --accent-subtitle: #2dd4bf;
-        --badge-bg: #0f172a;
-        --badge-text: #e2e8f0;
-        --badge-border: #334155;
-        --date-bg: #0f172a;
-        --nav-container-bg: #0f172a;
-        --nav-item-bg: #1e293b;
-        --nav-hover-bg: #134e4a;
-    }
-
     /* Main Container */
     .stApp {
         max-width: 1200px;
@@ -91,10 +19,12 @@ st.markdown("""
         padding: 1rem 2rem;
     }
 
-    /* Clean Academic Top Navbar */
+    /* ---------------------------------------------------------
+       NATIVE THEME NAVIGATION BAR (Adapts to Light/Dark Mode)
+       --------------------------------------------------------- */
     div.row-widget.stRadio > div[role="radiogroup"] {
-        background-color: var(--nav-container-bg) !important;
-        border: 1.5px solid var(--border-strong) !important;
+        background-color: var(--secondary-background-color) !important;
+        border: 1.5px solid rgba(128, 128, 128, 0.2) !important;
         border-radius: 10px !important;
         padding: 6px !important;
         display: flex !important;
@@ -106,8 +36,8 @@ st.markdown("""
 
     /* Unselected Buttons */
     div.row-widget.stRadio > div[role="radiogroup"] > label {
-        background-color: var(--nav-item-bg) !important;
-        border: 1px solid var(--border-strong) !important;
+        background-color: var(--background-color) !important;
+        border: 1px solid rgba(128, 128, 128, 0.2) !important;
         border-radius: 7px !important;
         padding: 9px 18px !important;
         margin: 0 !important;
@@ -116,7 +46,7 @@ st.markdown("""
         justify-content: center !important;
         align-items: center !important;
         cursor: pointer !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
         transition: all 0.15s ease-in-out !important;
     }
 
@@ -125,47 +55,51 @@ st.markdown("""
         display: none !important;
     }
 
-    /* High-contrast unselected text */
+    /* Unselected text: Inherits native text color */
     div.row-widget.stRadio > div[role="radiogroup"] > label * {
-        color: var(--text-primary) !important;
+        color: var(--text-color) !important;
         font-size: 0.96rem !important;
         font-weight: 600 !important;
         margin: 0 !important;
         text-align: center !important;
-        opacity: 1 !important;
+        opacity: 0.9 !important;
     }
 
     /* Hover State */
     div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
-        background-color: var(--nav-hover-bg) !important;
-        border-color: var(--accent-teal) !important;
+        border-color: #008B8B !important;
     }
     div.row-widget.stRadio > div[role="radiogroup"] > label:hover * {
-        color: var(--accent-subtitle) !important;
+        color: #008B8B !important;
+        opacity: 1 !important;
     }
 
     /* Active Selected Button */
     div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) {
-        background-color: var(--accent-teal) !important;
-        border-color: var(--accent-teal) !important;
+        background-color: #008B8B !important;
+        border-color: #008B8B !important;
         box-shadow: 0 2px 5px rgba(0, 139, 139, 0.35) !important;
     }
     div.row-widget.stRadio > div[role="radiogroup"] > label:has(input:checked) * {
         color: #ffffff !important;
         font-weight: 700 !important;
+        opacity: 1 !important;
     }
 
-    /* Homepage Typography */
+    /* ---------------------------------------------------------
+       TYPOGRAPHY & CARDS (Strictly using native variables)
+       --------------------------------------------------------- */
     .main-title {
         font-size: 3.3rem;
         font-weight: 700;
         margin-bottom: 0.2rem;
-        color: var(--text-heading);
+        color: var(--text-color);
         letter-spacing: -0.5px;
     }
     .sub-title {
         font-size: 1.65rem;
-        color: var(--text-secondary);
+        color: var(--text-color);
+        opacity: 0.8;
         font-weight: 500;
         margin-bottom: 1.5rem;
     }
@@ -177,23 +111,23 @@ st.markdown("""
         max-width: 820px;
         margin: 0 auto 1.8rem auto;
         padding: 24px 28px;
-        background-color: var(--intro-bg);
-        color: var(--text-primary);
-        border: 1px solid var(--border-color);
-        border-left: 4px solid var(--accent-teal);
+        background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        border-left: 4px solid #008B8B;
         border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     }
     .intro-text p {
-        color: var(--text-primary);
+        color: var(--text-color);
         margin: 0;
     }
     .first-letter {
-        font-size: 46px;
+        font-size: 50px;
         font-weight: bold;
-        color: var(--text-heading);
+        color: var(--text-color);
         margin: 0;
-        padding-right: 10px;
+        padding-right: 12px;
         float: left;
         line-height: 0.95;
     }
@@ -205,13 +139,13 @@ st.markdown("""
         text-align: center;
         margin-top: 1rem;
         padding: 1rem;
-        background-color: var(--card-alt-bg);
-        color: var(--text-primary);
+        background-color: var(--secondary-background-color);
+        color: var(--text-color);
         border-radius: 6px;
-        border: 1px dashed var(--border-strong);
+        border: 1px dashed rgba(128, 128, 128, 0.4);
     }
     .highlight {
-        color: var(--accent-subtitle);
+        color: #008B8B !important;
         font-weight: bold;
     }
 
@@ -223,23 +157,24 @@ st.markdown("""
         margin-bottom: 2rem;
     }
     .stat-box {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-top: 3px solid var(--accent-teal);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        border-top: 3px solid #008B8B;
         border-radius: 6px;
         padding: 0.9rem 1rem;
         text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .stat-value {
         font-size: 1.4rem;
         font-weight: 700;
-        color: var(--text-heading);
+        color: var(--text-color) !important;
         font-family: 'Georgia', serif;
     }
     .stat-label {
         font-size: 0.8rem;
-        color: var(--text-muted);
+        color: var(--text-color);
+        opacity: 0.7;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-top: 0.2rem;
@@ -247,25 +182,25 @@ st.markdown("""
 
     /* Clean Academic Cards */
     .cv-card {
-        background-color: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-left: 4px solid var(--accent-teal);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        border-left: 4px solid #008B8B;
         border-radius: 6px;
         padding: 1.15rem 1.35rem;
         margin-bottom: 1rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
         transition: box-shadow 0.15s ease;
     }
     .cv-card-alt {
-        background-color: var(--card-alt-bg);
-        border: 1px solid var(--border-color);
-        border-left: 4px solid var(--border-strong);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        border-left: 4px solid rgba(128, 128, 128, 0.5);
         border-radius: 6px;
         padding: 1.15rem 1.35rem;
         margin-bottom: 1rem;
     }
     .cv-card:hover {
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.09);
     }
     .cv-card-header {
         display: flex;
@@ -275,21 +210,21 @@ st.markdown("""
         gap: 0.5rem;
         margin-bottom: 0.3rem;
     }
-    .cv-card-title {
+    .cv-card-title, .cv-card-title a {
         font-size: 1.08rem;
         font-weight: 700;
-        color: var(--text-heading);
+        color: var(--text-color) !important;
+        text-decoration: none;
         margin: 0;
     }
-    .cv-card-title a {
-        color: var(--text-heading) !important;
+    .cv-card-title a:hover {
         text-decoration: underline;
     }
     .cv-card-date {
         font-size: 0.85rem;
-        color: var(--text-secondary);
-        background-color: var(--date-bg);
-        border: 1px solid var(--border-color);
+        background-color: var(--background-color);
+        color: var(--text-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
         padding: 2px 8px;
         border-radius: 4px;
         font-weight: 500;
@@ -297,53 +232,54 @@ st.markdown("""
     }
     .cv-card-subtitle {
         font-size: 0.93rem;
-        color: var(--accent-subtitle);
+        color: #008B8B !important;
         font-style: italic;
         margin-bottom: 0.5rem;
     }
     .cv-card-body {
         font-size: 0.94rem;
-        color: var(--text-primary);
+        color: var(--text-color) !important;
         line-height: 1.65;
         margin: 0;
     }
     .cv-card-body a {
-        color: var(--accent-subtitle) !important;
+        color: #008B8B !important;
     }
     .cv-card-tools {
         margin-top: 0.5rem;
         font-size: 0.86rem;
-        color: var(--text-secondary);
+        color: var(--text-color);
+        opacity: 0.8;
     }
 
     /* Certification List Row */
     .cert-row {
         padding: 7px 0;
-        border-bottom: 1px solid var(--border-color);
-        color: var(--text-primary);
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
     }
     .cert-row a {
         font-weight: 600;
-        color: var(--text-heading) !important;
+        color: var(--text-color) !important;
         text-decoration: none;
     }
     .cert-row a:hover {
-        color: var(--accent-subtitle) !important;
+        color: #008B8B !important;
         text-decoration: underline;
     }
     .cert-org {
-        color: var(--text-muted);
+        color: var(--text-color);
+        opacity: 0.7;
         font-size: 0.9rem;
     }
 
-    /* Easy-to-Read Note Box */
+    /* Note Box */
     .method-box {
-        background-color: var(--card-alt-bg);
-        border: 1px solid var(--border-color);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.2);
         border-radius: 6px;
         padding: 1.1rem 1.25rem;
         font-size: 0.92rem;
-        color: var(--text-primary);
+        color: var(--text-color) !important;
         line-height: 1.65;
         margin-bottom: 1rem;
     }
@@ -351,42 +287,28 @@ st.markdown("""
     /* Skill & Topic Badges */
     .skill-badge {
         display: inline-block;
-        background-color: var(--badge-bg);
-        color: var(--badge-text);
+        background-color: var(--background-color);
+        color: var(--text-color);
         padding: 5px 11px;
         margin: 3px 5px 3px 0;
         border-radius: 4px;
         font-size: 0.86rem;
         font-weight: 500;
-        border: 1px solid var(--badge-border);
+        border: 1px solid rgba(128, 128, 128, 0.3);
     }
 
-    /* Responsive Adjustments for Mobile & Tablet */
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
-        .stApp {
-            padding: 0.5rem 0.8rem;
-        }
-        .main-title {
-            font-size: 2.2rem;
-        }
-        .sub-title {
-            font-size: 1.25rem;
-        }
-        .intro-text {
-            padding: 16px;
-            font-size: 15px;
-        }
-        .stat-ribbon {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        .stApp { padding: 0.5rem 0.8rem; }
+        .main-title { font-size: 2.2rem; }
+        .sub-title { font-size: 1.25rem; }
+        .intro-text { padding: 16px; font-size: 15px; }
+        .stat-ribbon { grid-template-columns: repeat(2, 1fr); }
         div.row-widget.stRadio > div[role="radiogroup"] > label {
             flex: 1 1 45%;
             padding: 8px 10px !important;
         }
-        .cv-card-header {
-            flex-direction: column;
-            gap: 0.2rem;
-        }
+        .cv-card-header { flex-direction: column; gap: 0.2rem; }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -408,7 +330,7 @@ def render_nightingale_rose_diagram():
         "tooltip": {"trigger": "item", "formatter": "{b}: {c} ({d}%)"},
         "legend": {
             "top": "bottom",
-            "textStyle": {"color": "#8892b0"}
+            "textStyle": {"color": "#808080"}
         },
         "toolbox": {
             "show": True,
@@ -427,7 +349,7 @@ def render_nightingale_rose_diagram():
                 "center": ["50%", "45%"],
                 "roseType": "area",
                 "itemStyle": {"borderRadius": 8},
-                "label": {"color": "#8892b0"},
+                "label": {"color": "#808080"},
                 "data": [
                     {"value": 335, "name": "Statistical"},
                     {"value": 310, "name": "Technical"},
@@ -443,12 +365,12 @@ def render_nightingale_rose_diagram():
 def render_ble_protocol_line_chart():
     return {
         "tooltip": {"trigger": "axis"},
-        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
+        "legend": {"top": "bottom", "textStyle": {"color": "#808080"}},
         "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
             "boundaryGap": False,
-            "axisLabel": {"color": "#8892b0"},
+            "axisLabel": {"color": "#808080"},
             "data": [
                 "Row-Random\n(Overlapping)",
                 "45s Block\n(Purged)",
@@ -460,9 +382,9 @@ def render_ble_protocol_line_chart():
         "yAxis": {
             "type": "value",
             "name": "Macro-F1 Score",
-            "nameTextStyle": {"color": "#8892b0"},
-            "axisLabel": {"color": "#8892b0"},
-            "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.2)"}},
+            "nameTextStyle": {"color": "#808080"},
+            "axisLabel": {"color": "#808080"},
+            "splitLine": {"lineStyle": {"color": "rgba(128, 128, 128, 0.2)"}},
             "min": 0.15,
             "max": 0.95
         },
@@ -473,9 +395,9 @@ def render_ble_protocol_line_chart():
                 "smooth": True,
                 "symbolSize": 9,
                 "data": [0.901, 0.348, 0.280, 0.322, 0.316],
-                "itemStyle": {"color": "#14b8a6"},
+                "itemStyle": {"color": "#008B8B"},
                 "lineStyle": {"width": 3.5},
-                "areaStyle": {"opacity": 0.15, "color": "#14b8a6"}
+                "areaStyle": {"opacity": 0.15, "color": "#008B8B"}
             },
             {
                 "name": "60s Rich XGBoost (Standalone)",
@@ -511,11 +433,11 @@ def render_ble_protocol_line_chart():
 def render_ble_ablation_combo_chart():
     return {
         "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
-        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
+        "legend": {"top": "bottom", "textStyle": {"color": "#808080"}},
         "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
-            "axisLabel": {"color": "#8892b0"},
+            "axisLabel": {"color": "#808080"},
             "data": [
                 "10s RF\nBaseline",
                 "Multi-Resolution\nFusion (Untargeted)",
@@ -527,17 +449,17 @@ def render_ble_ablation_combo_chart():
             {
                 "type": "value",
                 "name": "Macro-F1",
-                "nameTextStyle": {"color": "#8892b0"},
-                "axisLabel": {"color": "#8892b0"},
-                "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.2)"}},
+                "nameTextStyle": {"color": "#808080"},
+                "axisLabel": {"color": "#808080"},
+                "splitLine": {"lineStyle": {"color": "rgba(128, 128, 128, 0.2)"}},
                 "min": 0.20,
                 "max": 0.35
             },
             {
                 "type": "value",
                 "name": "Accuracy / Weighted-F1",
-                "nameTextStyle": {"color": "#8892b0"},
-                "axisLabel": {"color": "#8892b0"},
+                "nameTextStyle": {"color": "#808080"},
+                "axisLabel": {"color": "#808080"},
                 "splitLine": {"show": False},
                 "min": 0.50,
                 "max": 0.65
@@ -550,7 +472,7 @@ def render_ble_ablation_combo_chart():
                 "barWidth": "38%",
                 "yAxisIndex": 0,
                 "data": [0.2561, 0.3051, 0.3077, 0.3159],
-                "itemStyle": {"color": "#14b8a6", "borderRadius": [4, 4, 0, 0]}
+                "itemStyle": {"color": "#008B8B", "borderRadius": [4, 4, 0, 0]}
             },
             {
                 "name": "Overall Accuracy",
@@ -577,11 +499,11 @@ def render_ble_ablation_combo_chart():
 def render_efg_clean_radar_chart():
     return {
         "tooltip": {"trigger": "item"},
-        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
+        "legend": {"top": "bottom", "textStyle": {"color": "#808080"}},
         "radar": {
-            "axisName": {"color": "#8892b0"},
-            "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.25)"}},
-            "splitArea": {"areaStyle": {"color": ["rgba(148, 163, 184, 0.04)", "rgba(148, 163, 184, 0.08)"]}},
+            "axisName": {"color": "#808080"},
+            "splitLine": {"lineStyle": {"color": "rgba(128, 128, 128, 0.25)"}},
+            "splitArea": {"areaStyle": {"color": ["rgba(128, 128, 128, 0.04)", "rgba(128, 128, 128, 0.08)"]}},
             "indicator": [
                 {"name": "Overall mIoU\n(Max 35)", "max": 35},
                 {"name": "Overall RayIoU\n(Max 40)", "max": 40},
@@ -606,8 +528,8 @@ def render_efg_clean_radar_chart():
                     {
                         "value": [30.44, 36.10, 41.07, 30.60, 17.02],
                         "name": "EFG + 2D Pretraining (Proposed)",
-                        "itemStyle": {"color": "#14b8a6"},
-                        "areaStyle": {"opacity": 0.2, "color": "#14b8a6"},
+                        "itemStyle": {"color": "#008B8B"},
+                        "areaStyle": {"opacity": 0.2, "color": "#008B8B"},
                         "lineStyle": {"width": 3}
                     },
                     {
@@ -625,12 +547,12 @@ def render_efg_clean_radar_chart():
 def render_efg_degradation_line_chart():
     return {
         "tooltip": {"trigger": "axis"},
-        "legend": {"top": "bottom", "textStyle": {"color": "#8892b0"}},
+        "legend": {"top": "bottom", "textStyle": {"color": "#808080"}},
         "grid": {"left": "4%", "right": "4%", "bottom": "16%", "top": "10%", "containLabel": True},
         "xAxis": {
             "type": "category",
             "boundaryGap": False,
-            "axisLabel": {"color": "#8892b0"},
+            "axisLabel": {"color": "#808080"},
             "data": [
                 "Motion Blur\n(Easy)",
                 "Motion Blur\n(Mid)",
@@ -643,9 +565,9 @@ def render_efg_degradation_line_chart():
         "yAxis": {
             "type": "value",
             "name": "Relative Robustness Retained (%)",
-            "nameTextStyle": {"color": "#8892b0"},
-            "axisLabel": {"color": "#8892b0"},
-            "splitLine": {"lineStyle": {"color": "rgba(148, 163, 184, 0.2)"}},
+            "nameTextStyle": {"color": "#808080"},
+            "axisLabel": {"color": "#808080"},
+            "splitLine": {"lineStyle": {"color": "rgba(128, 128, 128, 0.2)"}},
             "min": 0,
             "max": 100
         },
@@ -656,9 +578,9 @@ def render_efg_degradation_line_chart():
                 "smooth": True,
                 "symbolSize": 9,
                 "data": [93.0, 71.0, 61.2, 34.8, 16.1, 10.4],
-                "itemStyle": {"color": "#14b8a6"},
+                "itemStyle": {"color": "#008B8B"},
                 "lineStyle": {"width": 3.5},
-                "areaStyle": {"opacity": 0.15, "color": "#14b8a6"}
+                "areaStyle": {"opacity": 0.15, "color": "#008B8B"}
             },
             {
                 "name": "Standard Pre-Trained Baseline (SparseOcc)",
