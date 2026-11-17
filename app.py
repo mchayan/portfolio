@@ -871,7 +871,7 @@ def research():
 
     render_card(
         title="Multi-Resolution BLE Indoor Localization for Nursing Care under Signal Loss, Class Imbalance, and Temporal Shift",
-        subtitle="Role: Co-Researcher | Accepted at Journal of Physics: Conference Series (ISAS 2026 Challenge — Champion, 1st of 37 Teams)",
+        subtitle="Accepted at Journal of Physics: Conference Series (ISAS 2026 Challenge — Champion, 1st of 37 Teams)",
         date="2026",
         body=(
             "Studied how to recognize staff locations across 23 rooms in a nursing-care facility using noisy Bluetooth "
@@ -902,7 +902,7 @@ def research():
 
     render_card(
         title="Spatio-Temporal Paradox of 2D Priors: Evidential Feature Gating for Robust 3D Occupancy Prediction",
-        subtitle="Role: Co-Researcher | Accepted at IEEE EAEEIE 2026 & WiML Symposium @ ICML 2026 (Supported by JSPS KAKENHI 26K07547)",
+        subtitle="Accepted at IEEE EAEEIE 2026 & WiML Symposium @ ICML 2026 (Supported by JSPS KAKENHI 26K07547)",
         date="2026",
         body=(
             "Examined how 2D pre-trained image backbones affect 3D occupancy prediction for autonomous driving under bad "
@@ -931,7 +931,7 @@ def research():
 
     render_card(
         title="Machine Learning Based Feature Engineering for Identifying The Causes Of Divorce",
-        subtitle="Role: Graduate Researcher | M.Sc. Dissertation, Statistics & Data Science, Jahangirnagar Univ.",
+        subtitle="M.Sc. Dissertation, Statistics & Data Science, Jahangirnagar Univ.",
         date="Jun – Dec 2022",
         body=(
             "Analyzed behavioral and communication survey data curated by field specialists to study key factors "
@@ -944,7 +944,7 @@ def research():
 
     render_card(
         title="Computer Vision-based Street-width Measurement for Urban Aesthetics Identification",
-        subtitle="Role: Undergraduate Researcher | B.Sc. Dissertation, Dept. of CSE, Daffodil Int'l Univ.",
+        subtitle="B.Sc. Dissertation, Dept. of CSE, Daffodil Int'l Univ.",
         date="Nov 2017 – Jul 2018",
         body=(
             "Used basic computer vision techniques in OpenCV to estimate street widths from manually captured images "
